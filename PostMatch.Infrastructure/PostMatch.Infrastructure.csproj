@@ -18,8 +18,4 @@
     <ProjectReference Include="..\PostMatch.Core\PostMatch.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataBase\" />
-  </ItemGroup>
-
 </Project>

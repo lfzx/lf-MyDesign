@@ -61,6 +61,10 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
         public bool DeleteStudentByID(int id)
         {
             var student = Context.Student.SingleOrDefault(s => s.Id == id);
+            if(student == null)
+            {
+                return Context.SaveChanges() < 0;
+            }   
             Context.Student.Remove(student);
             return Context.SaveChanges() > 0;
         }

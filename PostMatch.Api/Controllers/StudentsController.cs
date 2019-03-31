@@ -14,7 +14,8 @@ namespace PostMatch.Api.Controllers
             AlanDao = alanDao;
         }
 
-        //插入数据https://localhost:5001/api/students?name=刘强&gender=1&age=18
+        //插入数据
+        //举例：https://localhost:5001/api/students?name=刘强&gender=1&age=18
         [HttpPost]
         public ActionResult<string> Create(string name, byte gender, int age)
         {
@@ -53,7 +54,8 @@ namespace PostMatch.Api.Controllers
 
         }
 
-        //取全部记录https://localhost:5001/api/students
+        //取全部记录
+        //举例：https://localhost:5001/api/students
         [HttpGet]
         public ActionResult<string> Gets()
         {
@@ -73,7 +75,8 @@ namespace PostMatch.Api.Controllers
             return names;
         }
 
-        //取某id记录https://localhost:5001/api/students/2
+        //取某id记录
+        //举例：https://localhost:5001/api/students/2
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
@@ -89,7 +92,8 @@ namespace PostMatch.Api.Controllers
         }
 
         //根据id更新整条记录
-        [HttpPut("{id}")]
+        //举例：https://localhost:5001/api/students/3?name=琳琳&gender=1&age=19
+        [HttpPut("{id}", Name = "UpdatePost")]
         public ActionResult<string> Update(int id, string name, byte gender, int age)
         {
             if (id <= 0)
@@ -133,6 +137,7 @@ namespace PostMatch.Api.Controllers
         }
 
         //根据id更新名称
+        //举例：https://localhost:5001/api/students/3?name=李刚
         [HttpPatch("{id}")]
         public ActionResult<string> UpdateName(int id, string name)
         {
@@ -158,7 +163,8 @@ namespace PostMatch.Api.Controllers
             }
         }
 
-        //根据id删掉记录https://localhost:5001/api/students/6
+        //根据id删掉记录
+        //举例：https://localhost:5001/api/students/6
         [HttpDelete("{id}")]
         public ActionResult<string> Delete(int id)
         {
@@ -175,7 +181,7 @@ namespace PostMatch.Api.Controllers
             }
             else
             {
-                return "学生删除失败";
+                return "该学生不存在";
             }
         }
     }

@@ -11,7 +11,7 @@ namespace PostMatch.Api.Controllers
         {
             //UserContext context = HttpContext.RequestServices.GetService(typeof(UserContext)) as UserContext;
             //var data = context.GetAllUser();
-            return Ok();
+            return Ok("hello World");
         }
     }
 }
