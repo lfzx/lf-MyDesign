@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,13 +11,14 @@ using Microsoft.IdentityModel.Tokens;
 using PostMatch.Api.Core;
 using PostMatch.Api.Helpers;
 using PostMatch.Api.Models;
-using PostMatch.Core.Services;
+using PostMatch.Core.Interface;
 using PostMatch.Infrastructure.DataAccess.Implement;
 using PostMatch.Infrastructure.DataAccess.Interface;
 using PostMatch.Infrastructure.DataBase;
 using PostMatch.Infrastructure.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PostMatch.Api
@@ -57,9 +59,12 @@ namespace PostMatch.Api
             options.UseMySQL(_configuration.GetConnectionString("DefaultConnection")));
 
             //注册数据库操作类
-            services.AddScoped<IAlanDao, AlanDao>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICompanyRepository, CompanyUserRepository>();
+            services.AddScoped<IAdministratorService, AdministratorService>();
+            services.AddScoped<IAdministratorRepository, AdministratorRepository>();
 
             // 配置强类型设置对象
             var appSettingsSection = _configuration.GetSection("AppSettings");
@@ -101,8 +106,17 @@ namespace PostMatch.Api
                     };
                 });
 
-            // 启用跨域
-            services.AddCors();
+            //配置跨域
+            services.AddCors(options =>
+            {
+                // 添加一个策略，AllowAngularDevOrigin为自定义名字，
+                //  builder.WithOrigins("http://localhost:4200")把所有从这个地址发出来的请求都允许
+                options.AddPolicy("AllowAngularDevOrigin",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                        .WithExposedHeaders("X-Pagination")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
 
         }
 
@@ -118,25 +132,37 @@ namespace PostMatch.Api
                 app.UseHsts();
             }
 
+            // 配置跨域
+            app.UseCors("AllowAngularDevOrigin");
+
             app.Use(async (context, next) =>
             {
                 if (!context.Request.Path.ToString().StartsWith("/api/passport"))
                 {
                     var _token = "";
+                    var _name = "";
+                    var _id = "";
                     if (context.Request.Headers.TryGetValue("token", out var tokens) && tokens.Count > 0)
                     {
                         _token = tokens[0];
+                        if(context.Request.Headers.TryGetValue("User", out var users) && tokens.Count > 0)
+                        {
+                            string[] sArray = Regex.Split(users, ",", RegexOptions.IgnoreCase);
+                            _name = sArray[0];
+                            _id = sArray[1];
+                        }
+
                     }
-                    if (_token == null)
+                    if (_token == "")
                     {
                         context.Response.StatusCode = 401;
                         return;
                     }
 
-                    var user = new User
+                    var user = new UserModel
                     {
-                        id = "1",
-                        UserName = "Mike"
+                        Id = _id,
+                        Name = _name
                     };
                     context.Items.Add("token", _token);
                     context.Items.Add("user", user);
@@ -151,13 +177,6 @@ namespace PostMatch.Api
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
-            // 配置跨域
-            app.UseCors(builder =>
-                builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-            );
 
             app.UseAuthentication();
 

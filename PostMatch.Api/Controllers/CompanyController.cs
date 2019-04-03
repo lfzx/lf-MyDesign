@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PostMatch.Api.Helpers;
 using PostMatch.Api.Models;
+using PostMatch.Core.Entities;
 using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using System;
@@ -12,75 +13,73 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using User = PostMatch.Core.Entities.User;
 
 namespace PostMatch.Api.Controllers
 {
-    [Route("api/passport")]
+    [Route("api/passport/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class UserController : ControllerApiBase
+    public class CompanyController : ControllerApiBase
     {
-        private readonly IUserService _iUserService;
+        private readonly ICompanyService _iCompanyService;
         private readonly AppSettings _appSettings;
         private readonly IMapper _iMapper;
 
-        public UserController(
-            IUserService iUserService,
+        public CompanyController(
+            ICompanyService iCompanyService,
             IMapper iMapper,
             IOptions<AppSettings> appSettings)
         {
-            _iUserService = iUserService;
+            _iCompanyService = iCompanyService;
             _appSettings = appSettings.Value;
             _iMapper = iMapper;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public JsonResult Authenticate([FromBody]UserModel userModel)
+        public JsonResult Authenticate([FromBody]CompanyUserModel userModel)
         {
-                var user = _iUserService.Authenticate(userModel.Email, userModel.Password);
+            var user = _iCompanyService.Authenticate(userModel.Email, userModel.Password);
 
-                if (user != null)
+            if (user != null)
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                    var tokenDescriptor = new SecurityTokenDescriptor
+                    Subject = new ClaimsIdentity(new Claim[]
                     {
-                        Subject = new ClaimsIdentity(new Claim[]
-                        {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                        }),
-                        Expires = DateTime.UtcNow.AddDays(7),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                    };
-                    var token = tokenHandler.CreateToken(tokenDescriptor);
-                    var tokenString = tokenHandler.WriteToken(token);
+                    new Claim(ClaimTypes.Name, user.CompanyId.ToString())
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
 
-                    return Output(new LoginResponse
-                    {
-                        token = tokenString,
-                        roleid = user.RoleId,
-                        avatar = user.Avatar,
-                        email = user.Email,
-                        name = user.Name,
-                        id = user.Id
-                    });
-                }
-                throw new Exception("无效用户");
+                return Output(new LoginResponse
+                {
+                    token = tokenString,
+                    avatar = user.Avatar,
+                    email = user.Email,
+                    name = user.CompanyName,
+                    id = user.CompanyId
+                });
+            }
+            throw new Exception("无效用户");
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]UserModel userModel)
+        public IActionResult Register([FromBody]CompanyUserModel userModel)
         {
             // map dto to entity
-            var user = _iMapper.Map<User>(userModel);
+            var user = _iMapper.Map<Companies>(userModel);
 
             try
             {
                 // save 
-                var result = _iUserService.Create(user, userModel.Password);
+                var result = _iCompanyService.Create(user, userModel.Password);
                 if (result != null)
                 {
                     return Output(new LoginResponse
@@ -89,7 +88,7 @@ namespace PostMatch.Api.Controllers
                     });
                 }
                 throw new Exception("注册失败！");
-            
+
             }
             catch (AppException ex)
             {
@@ -101,42 +100,42 @@ namespace PostMatch.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _iUserService.GetAll();
-            var userModels = _iMapper.Map<IList<UserModel>>(users);
-            if(userModels != null)
+            var users = _iCompanyService.GetAll();
+            var userModels = _iMapper.Map<IList<CompanyUserModel>>(users);
+            if (userModels != null)
             {
 
                 return Output(userModels);
             }
             throw new Exception("没有数据");
-        
+
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
-            var user = _iUserService.GetById(id);
-            var userModel = _iMapper.Map<UserModel>(user);
+            var user = _iCompanyService.GetById(id);
+            var userModel = _iMapper.Map<CompanyUserModel>(user);
             if (userModel != null)
             {
 
                 return Output(userModel);
             }
-            throw new Exception("该用户不存在");
+            throw new Exception("该公司未注册");
 
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody]UserModel userModel)
+        public IActionResult Update(string id, [FromBody]CompanyUserModel userModel)
         {
             // map dto to entity and set id
-            var user = _iMapper.Map<User>(userModel);
-            user.Id = id;
+            var user = _iMapper.Map<Companies>(userModel);
+            user.CompanyId = id;
 
             try
             {
                 // save 
-                 _iUserService.Update(user, userModel.Password);
+                _iCompanyService.Update(user, userModel.Password);
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
@@ -152,15 +151,15 @@ namespace PostMatch.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            var user = _iUserService.GetById(id);
-            if(user == null)
+            var user = _iCompanyService.GetById(id);
+            if (user == null)
             {
-                throw new Exception("该用户不存在");
+                throw new Exception("该公司未注册");
             }
             try
             {
                 // save 
-                _iUserService.Delete(id);
+                _iCompanyService.Delete(id);
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id

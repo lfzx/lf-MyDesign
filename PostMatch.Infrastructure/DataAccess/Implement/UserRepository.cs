@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PostMatch.Infrastructure.DataAccess.Interface;
+﻿using PostMatch.Infrastructure.DataAccess.Interface;
 using PostMatch.Infrastructure.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using PostMatch.Core.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PostMatch.Infrastructure.DataAccess.Implement
 {

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
+using PostMatch.Api.Models;
 using PostMatch.Core.Entities;
-using PostMatch.Core.Models;
-
 
 namespace PostMatch.Api.Helpers
 {
@@ -12,6 +11,10 @@ namespace PostMatch.Api.Helpers
         {
             CreateMap<User, UserModel>();
             CreateMap<UserModel, User>();
+            CreateMap<Companies, CompanyUserModel>();
+            CreateMap<CompanyUserModel, Companies>();
+            CreateMap<Administrator, AdministratorModel>();
+            CreateMap<AdministratorModel, Administrator>();
         }
     }
 }

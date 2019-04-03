@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PostMatch.Api.Models;
-using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace PostMatch.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AppController : ControllerApiBase
+    public class CompanyAppController : ControllerApiBase
     {
         [HttpGet("")]
         public JsonResult Get()
@@ -35,14 +35,14 @@ namespace PostMatch.Api.Controllers
                             },
                             new Menu()
                             {
-                                text = "公司推荐",
-                                link = "/user/jobRecommendations",
+                                text = "优才推荐",
+                                link = "/company/employeeRecommendations",
                                 icon = "anticon anticon-appstore-o"
                             },
                             new Menu()
                             {
-                                text = "个人简历",
-                                link = "/user/resumes",
+                                text = "招聘信息",
+                                link = "/company/posts",
                                 icon = "anticon anticon-rocket",
                             }
                         }
@@ -61,8 +61,8 @@ namespace PostMatch.Api.Controllers
                                 {
                                     new Menu()
                                     {
-                                        text = "简历投递情况",
-                                        link = "/user/deliveries"
+                                        text = "投递情况",
+                                        link = "/company/deliveries"
                                     }
                                 }
                             }

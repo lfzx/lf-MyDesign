@@ -12,16 +12,10 @@ namespace PostMatch.Infrastructure.DataBase
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<User>().Property(up => up).HasConversion(new BoolToZeroOneConverter<Int16>());
-        //}
-        
-
         // 将Student弄进来
-        public DbSet<Student> Student { get; set; }
-
         public DbSet<User> User { get; set; }
+        public DbSet<Companies> Companies { get; set; }
+        public DbSet<Administrator> Administrator { get; set; }
 
 
     }

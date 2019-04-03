@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PostMatch.Api.Models
 {
-    public class User
+    public class UserModel
     {
-        public string id { get; set; }
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
+        public string Id { get; set; }
+        public string RoleId { get; set; }
         public string Avatar { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
     }
@@ -30,12 +26,45 @@ namespace PostMatch.Api.Models
     {
         public string token { get; set; }
 
-        public string username { get; set; }
+        public string name { get; set; }
 
-        public string firstname { get; set; }
+        public string roleid { get; set; }
+
+        public string id { get; set; }
 
         public string email { get; set; }
 
         public string avatar { get; set; }
     }
+
+    public class DeleteOrUpdateResponse
+    {
+        public string id { get; set; }
+    }
+
+    public class CompanyUserModel
+    {
+        public string CompanyId { get; set; }
+        public string Avatar { get; set; }
+        public string CompanyName { get; set; }
+        public string Email { get; set; }
+        public string OrganizationCode { get; set; }
+        public string PersonalNumber { get; set; }
+        public string CompanyDescription { get; set; }
+        public string CompanyUrl { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class AdministratorModel
+    {
+        public string AdminId { get; set; }
+        public string Avatar { get; set; }
+        public string AdminName { get; set; }
+        public string Email { get; set; }
+        public string School { get; set; }
+        public int Status { get; set; }
+        public string Password { get; set; }
+    }
+
 }
+

@@ -1,9 +1,7 @@
 ﻿using PostMatch.Core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace PostMatch.Core.Services
+namespace PostMatch.Core.Interface
 {
     public interface IUserService
     {

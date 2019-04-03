@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PostMatch.Api.Models;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PostMatch.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AppController : ControllerApiBase
+    public class AdminAppController : ControllerApiBase
     {
         [HttpGet("")]
         public JsonResult Get()
@@ -27,7 +30,7 @@ namespace PostMatch.Api.Controllers
                         group = true,
                         children = new List<Menu>()
                         {
-                             new Menu()
+                            new Menu()
                             {
                                 text = "主页",
                                 link = "/dashboard",
@@ -35,14 +38,14 @@ namespace PostMatch.Api.Controllers
                             },
                             new Menu()
                             {
-                                text = "公司推荐",
-                                link = "/user/jobRecommendations",
-                                icon = "anticon anticon-appstore-o"
+                                text = "人员管理",
+                                link = "/admin/userManagements",
+                                icon = "anticon anticon-rocket",
                             },
                             new Menu()
                             {
-                                text = "个人简历",
-                                link = "/user/resumes",
+                                text = "公司管理",
+                                link = "/admin/companyManagements",
                                 icon = "anticon anticon-rocket",
                             }
                         }
@@ -61,8 +64,15 @@ namespace PostMatch.Api.Controllers
                                 {
                                     new Menu()
                                     {
-                                        text = "简历投递情况",
-                                        link = "/user/deliveries"
+                                        text = "注册审核",
+                                        link = "/admin/companiesUnconfirmed",
+                                        icon = "anticon anticon-rocket",
+                                    },
+                                    new Menu()
+                                    {
+                                        text = "岗位审核",
+                                        link = "/",
+                                        icon = "anticon anticon-rocket",
                                     }
                                 }
                             }
