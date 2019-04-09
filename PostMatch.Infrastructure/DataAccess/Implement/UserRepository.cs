@@ -22,6 +22,11 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
             return _context.User.SingleOrDefault(x => x.Email == email);
         }
 
+        public User GetUserByName(string name)
+        {
+            return _context.User.SingleOrDefault(x => x.Name == name);
+        }
+
         public IEnumerable<User> GetAll()
         {
             return _context.User;

@@ -65,6 +65,14 @@ namespace PostMatch.Api
             services.AddScoped<ICompanyRepository, CompanyUserRepository>();
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<IAdministratorRepository, AdministratorRepository>();
+            services.AddScoped<IResumeService, ResumeService>();
+            services.AddScoped<IResumeRepository, ResumeRepository>();
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<IDeliveryService, DeliveryService>();
+            services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+            services.AddScoped<IRecommendService, RecommendService>();
+            services.AddScoped<IRecommendRepository, RecommendRepository>();
 
             // 配置强类型设置对象
             var appSettingsSection = _configuration.GetSection("AppSettings");

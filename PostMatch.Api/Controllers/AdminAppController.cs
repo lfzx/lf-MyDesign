@@ -16,6 +16,7 @@ namespace PostMatch.Api.Controllers
         [HttpGet("")]
         public JsonResult Get()
         {
+            var count = 1;
             return Output(new App
             {
                 project = new Project()
@@ -40,7 +41,7 @@ namespace PostMatch.Api.Controllers
                             {
                                 text = "人员管理",
                                 link = "/admin/userManagements",
-                                icon = "anticon anticon-rocket",
+                                icon = "anticon anticon-user",
                             },
                             new Menu()
                             {
@@ -79,7 +80,7 @@ namespace PostMatch.Api.Controllers
                         }
                     }
                 }
-            });
+            },count);
         }
     }
 }

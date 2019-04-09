@@ -8,13 +8,16 @@ namespace PostMatch.Api.Controllers
 {
     public abstract class ControllerApiBase : ControllerBase
     {
-        public JsonResult Output(object data, string msg = "ok")
+        public JsonResult Output(object list, int total,string msg = "ok")
         {
             return new JsonResult(new
             {
                 msg,
-                data
+                list,
+                total
             });
         }
+
+      
     }
 }

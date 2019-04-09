@@ -67,9 +67,15 @@ namespace PostMatch.Infrastructure.Services
             CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
             user.AdminId = Guid.NewGuid().ToString();
+            user.RoleId = 1;
+            if (user.Avatar == null)
+            {
+                user.Avatar = "https://ng-alain.com/assets/img/logo-color.svg";
+            }
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-
+            user.UpdateTime = DateTime.Now;
+        
             _iAdministratorRepository.Add(user);
 
             return user;
@@ -97,6 +103,7 @@ namespace PostMatch.Infrastructure.Services
             // update user properties
             user.School = userParam.School;
             user.Avatar = userParam.Avatar;
+            user.UpdateTime = DateTime.Now;
             user.AdminName = userParam.AdminName;
 
             // update password if it was entered

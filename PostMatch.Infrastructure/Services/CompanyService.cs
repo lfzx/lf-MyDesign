@@ -75,6 +75,16 @@ namespace PostMatch.Infrastructure.Services
             CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
             companies.CompanyId = Guid.NewGuid().ToString();
+            if (companies.RoleId == 0)
+            {
+                companies.RoleId = 3;
+            }
+            companies.Status = companies.Status;
+            companies.UpdateTime = DateTime.Now;
+            if (companies.Avatar == null)
+            {
+                companies.Avatar = "https://ng-alain.com/assets/img/logo-color.svg";
+            }
             companies.PasswordHash = passwordHash;
             companies.PasswordSalt = passwordSalt;
 
@@ -107,6 +117,7 @@ namespace PostMatch.Infrastructure.Services
             user.Avatar = companies.Avatar;
             user.CompanyUrl = companies.CompanyUrl;
             user.CompanyName = companies.CompanyName;
+            user.UpdateTime = DateTime.Now;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -116,6 +127,47 @@ namespace PostMatch.Infrastructure.Services
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
             }
+
+            _iCompanyRepository.Update(user);
+        }
+
+        public void Patch(Companies companies, string password)
+        {
+            var user = _iCompanyRepository.GetById(companies.CompanyId);
+
+            if (user == null)
+                throw new AppException("该用户不存在！");
+
+            //if (userParam.Name != user.Name)
+            //{
+            //    //// username has changed so check if the new username is already taken
+            //    //if (_iUserRepository.Any(x => x.Name == userParam.Name))
+            //    //    throw new AppException("Username " + userParam.Name + " is already taken");
+            //}
+            if (password == null)
+            {
+                user.PasswordHash = user.PasswordHash;
+                user.PasswordSalt = user.PasswordSalt;
+            }
+            else
+            {
+                CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+
+            // update user properties
+            user.CompanyDescription = companies.CompanyDescription;
+            if (user.Avatar == null)
+            {
+                user.Avatar = user.Avatar;
+            }
+            user.Avatar = companies.Avatar;
+            user.Email = companies.Email;
+            user.Status = companies.Status;
+            user.CompanyUrl = companies.CompanyUrl;
+            user.CompanyName = companies.CompanyName;
+            user.UpdateTime = DateTime.Now;
 
             _iCompanyRepository.Update(user);
         }

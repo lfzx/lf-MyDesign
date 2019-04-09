@@ -11,6 +11,7 @@ using PostMatch.Core.Interface;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -56,6 +57,7 @@ namespace PostMatch.Api.Controllers
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
+                var count = 1;
 
                 return Output(new LoginResponse
                 {
@@ -63,8 +65,9 @@ namespace PostMatch.Api.Controllers
                     avatar = user.Avatar,
                     email = user.Email,
                     name = user.CompanyName,
+                    roleid = user.RoleId,
                     id = user.CompanyId
-                });
+                },count);
             }
             throw new Exception("无效用户");
         }
@@ -75,6 +78,7 @@ namespace PostMatch.Api.Controllers
         {
             // map dto to entity
             var user = _iMapper.Map<Companies>(userModel);
+            var count = 1;
 
             try
             {
@@ -85,7 +89,7 @@ namespace PostMatch.Api.Controllers
                     return Output(new LoginResponse
                     {
                         email = user.Email,
-                    });
+                    },count);
                 }
                 throw new Exception("注册失败！");
 
@@ -102,10 +106,11 @@ namespace PostMatch.Api.Controllers
         {
             var users = _iCompanyService.GetAll();
             var userModels = _iMapper.Map<IList<CompanyUserModel>>(users);
+            var count = userModels.Count();
             if (userModels != null)
             {
 
-                return Output(userModels);
+                return Output(userModels,count);
             }
             throw new Exception("没有数据");
 
@@ -116,10 +121,11 @@ namespace PostMatch.Api.Controllers
         {
             var user = _iCompanyService.GetById(id);
             var userModel = _iMapper.Map<CompanyUserModel>(user);
+            var count = 1;
             if (userModel != null)
             {
 
-                return Output(userModel);
+                return Output(userModel,count);
             }
             throw new Exception("该公司未注册");
 
@@ -130,6 +136,7 @@ namespace PostMatch.Api.Controllers
         {
             // map dto to entity and set id
             var user = _iMapper.Map<Companies>(userModel);
+            var count = 1;
             user.CompanyId = id;
 
             try
@@ -139,7 +146,31 @@ namespace PostMatch.Api.Controllers
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
-                });
+                },count);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult Patch(string id, [FromBody]CompanyUserModel userModel)
+        {
+            // map dto to entity and set id
+            var user = _iMapper.Map<Companies>(userModel);
+            user.CompanyId = id;
+            var count = 1;
+
+            try
+            {
+                // save 
+                _iCompanyService.Patch(user, userModel.Password);
+                return Output(new DeleteOrUpdateResponse
+                {
+                    id = id
+                }, count);
             }
             catch (AppException ex)
             {
@@ -152,6 +183,7 @@ namespace PostMatch.Api.Controllers
         public IActionResult Delete(string id)
         {
             var user = _iCompanyService.GetById(id);
+            var count = 1;
             if (user == null)
             {
                 throw new Exception("该公司未注册");
@@ -163,7 +195,7 @@ namespace PostMatch.Api.Controllers
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
-                });
+                },count);
             }
             catch (AppException ex)
             {

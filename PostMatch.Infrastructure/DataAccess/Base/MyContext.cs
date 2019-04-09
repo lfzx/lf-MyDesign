@@ -16,7 +16,10 @@ namespace PostMatch.Infrastructure.DataBase
         public DbSet<User> User { get; set; }
         public DbSet<Companies> Companies { get; set; }
         public DbSet<Administrator> Administrator { get; set; }
-
+        public DbSet<Resume> Resume { get; set; }
+        public DbSet<Post> Post { get; set; }
+        public DbSet<Recommend> Recommend { get; set; }
+        public DbSet<Delivery> Deliveries { get; set; }
 
     }
 }

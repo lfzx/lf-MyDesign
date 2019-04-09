@@ -25,6 +25,12 @@ namespace PostMatch.Core.Entities
         [Column("school")]
         public string School { get; set; }
 
+        [Column("roleId")]
+        public int RoleId { get; set; }
+
+        [Column("updateTime")]
+        public DateTime UpdateTime { get; set; }
+
         [Column("passwordHash")]
         public byte[] PasswordHash { get; set; }
 

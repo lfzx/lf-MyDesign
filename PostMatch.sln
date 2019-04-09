@@ -5,11 +5,9 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostMatch.Api", "PostMatch.Api\PostMatch.Api.csproj", "{237FC3CC-969E-4DC2-9264-E02EFB63754C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostMatch.Core", "PostMatch.Core\PostMatch.Core.csproj", "{788705BF-8337-425A-A140-264E9A63EF59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostMatch.Core", "PostMatch.Core\PostMatch.Core.csproj", "{788705BF-8337-425A-A140-264E9A63EF59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostMatch.Infrastructure", "PostMatch.Infrastructure\PostMatch.Infrastructure.csproj", "{0A24B6C1-A09B-4B60-BA22-77390F934944}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostIdp", "PostIdp\PostIdp.csproj", "{D0EFF9CA-0573-4494-AC0F-7929974EBE39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostMatch.Infrastructure", "PostMatch.Infrastructure\PostMatch.Infrastructure.csproj", "{0A24B6C1-A09B-4B60-BA22-77390F934944}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{0A24B6C1-A09B-4B60-BA22-77390F934944}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A24B6C1-A09B-4B60-BA22-77390F934944}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A24B6C1-A09B-4B60-BA22-77390F934944}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0EFF9CA-0573-4494-AC0F-7929974EBE39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0EFF9CA-0573-4494-AC0F-7929974EBE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0EFF9CA-0573-4494-AC0F-7929974EBE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0EFF9CA-0573-4494-AC0F-7929974EBE39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

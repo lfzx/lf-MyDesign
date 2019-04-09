@@ -15,6 +15,18 @@ namespace PostMatch.Api.Helpers
             CreateMap<CompanyUserModel, Companies>();
             CreateMap<Administrator, AdministratorModel>();
             CreateMap<AdministratorModel, Administrator>();
+            CreateMap<Resume, ResumeModel>();
+            CreateMap<ResumeModel, Resume>();
+            CreateMap<Post, PostModel>();
+            CreateMap<PostModel, Post>();
+            CreateMap<Recommend, RecommendModel>();
+            CreateMap<RecommendModel, Recommend>();
+            CreateMap<Recommend, RecommendModels>();
+            CreateMap<RecommendModels, Recommend>();
+            CreateMap<Delivery, DeliveryModel>();
+            CreateMap<DeliveryModel, Delivery>();
+            CreateMap<Delivery, DeliveryModels>();
+            CreateMap<DeliveryModels, Delivery>();
         }
     }
 }

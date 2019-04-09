@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PostMatch.Core.Entities
@@ -31,8 +32,14 @@ namespace PostMatch.Core.Entities
         [Column("personalNumber")]
         public string PersonalNumber { get; set; }
 
+        [Column("roleId")]
+        public int RoleId { get; set; }
+
         [Column("status")]
         public int Status { get; set; }
+
+        [Column("updateTime")]
+        public DateTime UpdateTime { get; set; }
 
         [Column("passwordHash")]
         public byte[] PasswordHash { get; set; }

@@ -5,6 +5,7 @@ using PostMatch.Infrastructure.DataAccess.Interface;
 using System;
 using System.Collections.Generic;
 
+
 namespace PostMatch.Infrastructure.Services
 {
     public class UserService : IUserService
@@ -26,6 +27,12 @@ namespace PostMatch.Infrastructure.Services
             // 检查用户名是否存在
             if (user == null)
                 return null;
+
+            //检查用户使用状态
+            if (user.IsEnable == 0)
+            {
+                return null;
+            }
 
             // 检查密码是否正确
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
@@ -66,9 +73,18 @@ namespace PostMatch.Infrastructure.Services
             CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
             user.Id = Guid.NewGuid().ToString();
+            if(user.RoleId == 0)
+            {
+                user.RoleId = 2;
+            }
+            if (user.Avatar == null)
+            {
+                user.Avatar = "https://ng-alain.com/assets/img/logo-color.svg";
+            }
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-
+            user.UpdateTime = DateTime.Now;
+            user.IsEnable = user.IsEnable;
             _iUserRepository.Add(user);
 
             return user;
@@ -97,6 +113,7 @@ namespace PostMatch.Infrastructure.Services
             user.RoleId = userParam.RoleId;
             user.Avatar = userParam.Avatar;
             user.Name = userParam.Name;
+            user.UpdateTime = DateTime.Now;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -106,6 +123,39 @@ namespace PostMatch.Infrastructure.Services
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
             }
+
+            _iUserRepository.Update(user);
+        }
+
+        public void Patch(User userParam, string password)
+        {
+            var user = _iUserRepository.GetById(userParam.Id);
+
+            if (user == null)
+                throw new AppException("该用户不存在！");
+
+            //if (userParam.Name != user.Name)
+            //{
+            //    //// username has changed so check if the new username is already taken
+            //    //if (_iUserRepository.Any(x => x.Name == userParam.Name))
+            //    //    throw new AppException("Username " + userParam.Name + " is already taken");
+            //}
+            if (password == null){
+                user.PasswordHash = user.PasswordHash;
+                user.PasswordSalt = user.PasswordSalt;
+            }
+            else {
+                CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+
+            // update user properties
+            user.RoleId = userParam.RoleId;
+            user.Name = userParam.Name;
+            user.IsEnable = user.IsEnable;
+            user.Email = user.Email;
+            user.UpdateTime = DateTime.Now;
 
             _iUserRepository.Update(user);
         }
@@ -151,5 +201,6 @@ namespace PostMatch.Infrastructure.Services
 
             return true;
         }
+
     }
 }

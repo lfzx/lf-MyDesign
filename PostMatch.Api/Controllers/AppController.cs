@@ -13,6 +13,7 @@ namespace PostMatch.Api.Controllers
         [HttpGet("")]
         public JsonResult Get()
         {
+            var count = 1;
             return Output(new App
             {
                 project = new Project()
@@ -37,13 +38,13 @@ namespace PostMatch.Api.Controllers
                             {
                                 text = "公司推荐",
                                 link = "/user/jobRecommendations",
-                                icon = "anticon anticon-appstore-o"
+                                icon = "anticon anticon-bulb"
                             },
                             new Menu()
                             {
                                 text = "个人简历",
                                 link = "/user/resumes",
-                                icon = "anticon anticon-rocket",
+                                icon = "anticon anticon-profile",
                             }
                         }
                     },
@@ -62,14 +63,15 @@ namespace PostMatch.Api.Controllers
                                     new Menu()
                                     {
                                         text = "简历投递情况",
-                                        link = "/user/deliveries"
+                                        link = "/user/deliveries",
+                                        icon = "anticon anticon-check-circle"
                                     }
                                 }
                             }
                         }
                     }
                 }
-            });
+            },count);
         }
     }
 }

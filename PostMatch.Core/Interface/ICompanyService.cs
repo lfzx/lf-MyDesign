@@ -10,6 +10,7 @@ namespace PostMatch.Core.Interface
         Companies GetById(string id);
         Companies Create(Companies companies, string password);
         void Update(Companies companies, string password = null);
+        void Patch(Companies companies, string password);
         void Delete(string id);
     }
 }

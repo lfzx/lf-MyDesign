@@ -42,7 +42,7 @@ namespace PostMatch.Api.Controllers
         public JsonResult Authenticate([FromBody]AdministratorModel userModel)
         {
             var user = _iAdministratorService.Authenticate(userModel.Email, userModel.Password);
-
+            var count = 1;
             if (user != null)
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -65,8 +65,9 @@ namespace PostMatch.Api.Controllers
                     avatar = user.Avatar,
                     email = user.Email,
                     name = user.AdminName,
+                    roleid = user.RoleId,
                     id = user.AdminId
-                });
+                },count);
             }
             throw new Exception("无效用户");
         }
@@ -77,6 +78,7 @@ namespace PostMatch.Api.Controllers
         {
             // map dto to entity
             var user = _iMapper.Map<Administrator>(userModel);
+            var count = 1;
 
             try
             {
@@ -87,7 +89,7 @@ namespace PostMatch.Api.Controllers
                     return Output(new LoginResponse
                     {
                         email = user.Email,
-                    });
+                    },count);
                 }
                 throw new Exception("注册失败！");
 
@@ -104,10 +106,11 @@ namespace PostMatch.Api.Controllers
         {
             var users = _iAdministratorService.GetAll();
             var userModels = _iMapper.Map<IList<AdministratorModel>>(users);
+            var count = userModels.Count();
             if (userModels != null)
             {
 
-                return Output(userModels);
+                return Output(userModels,count);
             }
             throw new Exception("没有数据");
 
@@ -118,10 +121,11 @@ namespace PostMatch.Api.Controllers
         {
             var user = _iAdministratorService.GetById(id);
             var userModel = _iMapper.Map<AdministratorModel>(user);
+            var count = 1;
             if (userModel != null)
             {
 
-                return Output(userModel);
+                return Output(userModel,count);
             }
             throw new Exception("该用户不存在");
 
@@ -132,6 +136,7 @@ namespace PostMatch.Api.Controllers
         {
             // map dto to entity and set id
             var user = _iMapper.Map<Administrator>(userModel);
+            var count = 1;
             user.AdminId = id;
 
             try
@@ -141,7 +146,7 @@ namespace PostMatch.Api.Controllers
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
-                });
+                },count);
             }
             catch (AppException ex)
             {
@@ -154,6 +159,7 @@ namespace PostMatch.Api.Controllers
         public IActionResult Delete(string id)
         {
             var user = _iAdministratorService.GetById(id);
+            var count = 1;
             if (user == null)
             {
                 throw new Exception("该用户不存在");
@@ -165,7 +171,7 @@ namespace PostMatch.Api.Controllers
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
-                });
+                },count);
             }
             catch (AppException ex)
             {
