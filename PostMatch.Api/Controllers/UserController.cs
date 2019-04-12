@@ -23,15 +23,18 @@ namespace PostMatch.Api.Controllers
     public class UserController : ControllerApiBase
     {
         private readonly IUserService _iUserService;
+        private readonly IResumeService _iResumeService;
         private readonly AppSettings _appSettings;
         private readonly IMapper _iMapper;
 
         public UserController(
             IUserService iUserService,
+            IResumeService iResumeService,
             IMapper iMapper,
             IOptions<AppSettings> appSettings)
         {
             _iUserService = iUserService;
+            _iResumeService = iResumeService;
             _appSettings = appSettings.Value;
             _iMapper = iMapper;
         }
@@ -57,16 +60,29 @@ namespace PostMatch.Api.Controllers
                     };
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
-                   var count = 1;
+                    var count = 1;
+                    var resumeid = "";
+                    var resume = _iResumeService.GetByUserId(user.Id);
+                    if (resume != null)
+                    {
+                    resumeid = resume.ResumeId;
+                    }
 
-                    return Output(new LoginResponse
+                return Output(new UserLoginResponse
                     {
                         token = tokenString,
                         roleid = user.RoleId,
+                        resumeid = resumeid,
                         avatar = user.Avatar,
                         email = user.Email,
                         name = user.Name,
-                        id = user.Id
+                        id = user.Id,
+                        school = user.School,
+                        gender = user.Gender,
+                        entranceTime = user.EntranceTime,
+                        graduationTime = user.GraduationTime,
+                        profession = user.Profession,
+                        academic = user.Academic
                     },count);
                 }
                 throw new Exception("无效用户");

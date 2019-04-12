@@ -27,6 +27,13 @@ namespace PostMatch.Api.Helpers
             CreateMap<DeliveryModel, Delivery>();
             CreateMap<Delivery, DeliveryModels>();
             CreateMap<DeliveryModels, Delivery>();
+            CreateMap<ResponseResumeModel, Resume>();
+            CreateMap<Resume, ResponseResumeModel>();
+            CreateMap<PostModels, Post>();
+            CreateMap<Post, PostModels>();
+            CreateMap<CompanyUserModel, Companies>();
+            CreateMap<Companies, CompanyUserModel>();
+
         }
     }
 }

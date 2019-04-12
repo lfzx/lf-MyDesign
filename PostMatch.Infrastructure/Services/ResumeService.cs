@@ -38,14 +38,13 @@ namespace PostMatch.Infrastructure.Services
                 resume.ResumeAvatar = "https://ng-alain.com/assets/img/logo-color.svg";
             }
             resume.UserId = userId;
+            resume.Birth = resume.Birth;
             resume.ResumeUpdateTime = DateTime.Now;
-            resume.Gender = resume.Gender;
             resume.ResumeTelephoneNumber = resume.ResumeTelephoneNumber;
             resume.FamilyAddress = resume.FamilyAddress;
             resume.ResumePostName = resume.ResumePostName;
             resume.ResumeSalary = resume.ResumeSalary;
             resume.ResumeWorkPlace = resume.ResumeWorkPlace;
-            resume.Academic = resume.Academic;
             resume.ResumeJobType = resume.ResumeJobType;
             resume.ResumeExperience = resume.ResumeExperience;
             resume.Skill = resume.Skill;
@@ -76,6 +75,11 @@ namespace PostMatch.Infrastructure.Services
             return _iResumeRepository.GetById(id);
         }
 
+        public Resume GetByUserId(string id)
+        {
+            return _iResumeRepository.GetByUserId(id);
+        }
+
         public void Patch(Resume resume, string userId)
         {
             var resumes = _iResumeRepository.GetById(resume.ResumeId);
@@ -96,14 +100,13 @@ namespace PostMatch.Infrastructure.Services
                 resumes.ResumeAvatar = "https://ng-alain.com/assets/img/logo-color.svg";
             }
             resumes.UserId = userId;
+            resumes.Birth = resume.Birth;
             resumes.ResumeUpdateTime = DateTime.Now;
-            resumes.Gender = resume.Gender;
             resumes.ResumeTelephoneNumber = resume.ResumeTelephoneNumber;
             resumes.FamilyAddress = resume.FamilyAddress;
             resumes.ResumePostName = resume.ResumePostName;
             resumes.ResumeSalary = resume.ResumeSalary;
             resumes.ResumeWorkPlace = resume.ResumeWorkPlace;
-            resumes.Academic = resume.Academic;
             resumes.ResumeJobType = resume.ResumeJobType;
             resumes.ResumeExperience = resume.ResumeExperience;
             resumes.Skill = resume.Skill;
@@ -125,13 +128,12 @@ namespace PostMatch.Infrastructure.Services
                 resumes.ResumeAvatar = "https://ng-alain.com/assets/img/logo-color.svg";
             }
             resumes.ResumeUpdateTime = DateTime.Now;
-            resumes.Gender = resume.Gender;
             resumes.ResumeTelephoneNumber = resume.ResumeTelephoneNumber;
             resumes.FamilyAddress = resume.FamilyAddress;
             resumes.ResumePostName = resume.ResumePostName;
             resumes.ResumeSalary = resume.ResumeSalary;
             resumes.ResumeWorkPlace = resume.ResumeWorkPlace;
-            resumes.Academic = resume.Academic;
+            resumes.Birth = resume.Birth;
             resumes.ResumeJobType = resume.ResumeJobType;
             resumes.ResumeExperience = resume.ResumeExperience;
             resumes.Skill = resume.Skill;

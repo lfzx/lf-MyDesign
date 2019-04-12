@@ -10,6 +10,7 @@ namespace PostMatch.Infrastructure.DataAccess.Interface
     {
         IEnumerable<Post> GetAll();
         Post GetById(string id);
+        //Post GetByCompanyId(string id);
         bool Any(Expression<Func<Post, bool>> predicate);
         int Add(Post post);
         int Update(Post post);

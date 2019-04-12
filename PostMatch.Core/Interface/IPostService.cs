@@ -9,6 +9,7 @@ namespace PostMatch.Core.Interface
     {
         IEnumerable<Post> GetAll();
         Post GetById(string id);
+        //Post GetByCompanyId(string id);
         Post Create(Post post, string companyId);
         void Update(Post post);
         void Patch(Post post, string companyId);

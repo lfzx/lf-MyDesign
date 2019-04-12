@@ -17,9 +17,6 @@ namespace PostMatch.Core.Entities
         [Column("resumeAvatar")]
         public string ResumeAvatar { get; set; }
 
-        [Column("gender")]
-        public int Gender { get; set; }
-
         [Column("resumeTelephoneNumber")]
         public string ResumeTelephoneNumber { get; set; }
 
@@ -38,14 +35,14 @@ namespace PostMatch.Core.Entities
         [Column("resumeJobType")]
         public string ResumeJobType { get; set; }
 
-        [Column("academic")]
-        public string Academic { get; set; }
-
         [Column("resumeExperience")]
         public string ResumeExperience { get; set; }
 
         [Column("skill")]
         public string Skill { get; set; }
+
+        [Column("birth")]
+        public string Birth { get; set; }
 
         [Column("isEnable")]
         public int IsEnable { get; set; }

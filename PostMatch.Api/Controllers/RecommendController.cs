@@ -101,9 +101,9 @@ namespace PostMatch.Api.Controllers
             var resume= _iResumeService.GetById(recommendModel.ResumeId);
             var resumeModel = _iMapper.Map<ResumeModel>(resume);
             var company = _iCompanyService.GetById(post.CompanyId);
-            var companyModel = _iMapper.Map<CompanyUserModel>(company);
+            var companyModel = _iMapper.Map<ResponseCompanyUserModel>(company);
             var user = _iUserService.GetById(resume.UserId);
-            var userModel = _iMapper.Map<UserModel>(user);
+            var userModel = _iMapper.Map<ResponseUserModel>(user);
 
             recommendModel.postModel = postModel;
             recommendModel.resumeModel = resumeModel;

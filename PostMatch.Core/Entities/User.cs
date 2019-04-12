@@ -13,5 +13,13 @@ namespace PostMatch.Core.Entities
         public DateTime UpdateTime { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+
+        public int Gender { get; set; }
+        public string Academic { get; set; }
+        public string School { get; set; }
+        public string EntranceTime { get; set; }
+        public string GraduationTime { get; set; }
+        public string Profession { get; set; }
+
     }
 }

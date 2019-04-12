@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MySql.Data.MySqlClient;
 using PostMatch.Api.Helpers;
 using PostMatch.Api.Models;
 using PostMatch.Core.Entities;
@@ -10,6 +12,7 @@ using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -25,22 +28,25 @@ namespace PostMatch.Api.Controllers
         private readonly ICompanyService _iCompanyService;
         private readonly AppSettings _appSettings;
         private readonly IMapper _iMapper;
+        private readonly IPostService _iPostService;
 
         public CompanyController(
             ICompanyService iCompanyService,
             IMapper iMapper,
+            IPostService iPostService,
             IOptions<AppSettings> appSettings)
         {
             _iCompanyService = iCompanyService;
             _appSettings = appSettings.Value;
             _iMapper = iMapper;
+            _iPostService = iPostService;
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public JsonResult Authenticate([FromBody]CompanyUserModel userModel)
         {
-            var user = _iCompanyService.Authenticate(userModel.Email, userModel.Password);
+            var user = _iCompanyService.Authenticate(userModel.Email, userModel.Password); 
 
             if (user != null)
             {
@@ -59,14 +65,18 @@ namespace PostMatch.Api.Controllers
                 var tokenString = tokenHandler.WriteToken(token);
                 var count = 1;
 
-                return Output(new LoginResponse
+                return Output(new CompanyLoginResponse
                 {
                     token = tokenString,
                     avatar = user.Avatar,
                     email = user.Email,
                     name = user.CompanyName,
                     roleid = user.RoleId,
-                    id = user.CompanyId
+                    id = user.CompanyId,
+                    OrganizationCode = user.OrganizationCode,
+                    PersonalNumber = user.PersonalNumber,
+                    CompanyDescription = user.CompanyDescription,
+                    CompanyUrl = user.CompanyUrl,
                 },count);
             }
             throw new Exception("无效用户");
@@ -129,6 +139,17 @@ namespace PostMatch.Api.Controllers
             }
             throw new Exception("该公司未注册");
 
+        }
+
+        [HttpGet("post/{id}")]
+        public IActionResult GetByCompanyId(string id)
+        {
+            DataSet item = _iCompanyService.GetByName(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+            return Output(item,count);
         }
 
         [HttpPut("{id}")]

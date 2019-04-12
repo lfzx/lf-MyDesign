@@ -9,6 +9,7 @@ namespace PostMatch.Core.Interface
     {
         IEnumerable<Resume> GetAll();
         Resume GetById(string id);
+        Resume GetByUserId(string id);
         Resume Create(Resume resume,string userId);
         void Update(Resume resume);
         void Patch(Resume resume, string userId);

@@ -46,23 +46,9 @@ namespace PostMatch.Api.Controllers
                 var count = 1;
                 if (result != null)
                 {
-                    return Output(new PostModel
+                    return Output(new DeleteOrUpdateResponse
                     {
-                        PostId = result.PostId,
-                        CompanyId= result.CompanyId,
-                        PostDescription = result.PostDescription,
-                        PostTelephoneNumber = result.PostTelephoneNumber,
-                        City = result.City,
-                        NumberOfRecruits = result.NumberOfRecruits,
-                        PostName = result.PostName,
-                        PostSalary = result.PostSalary,
-                        PostWorkPlace = result.PostWorkPlace,
-                        PostJobType = result.PostJobType,
-                        AcademicRequirements = result.AcademicRequirements,
-                        PostExperience = result.PostExperience,
-                        PostEmail = result.PostEmail,
-                        IsEnable = 1,
-                        PostUpdateTime = result.PostUpdateTime
+                        id = result.PostId
                     }, count);
                 }
                 throw new Exception("创建失败！");
@@ -95,7 +81,7 @@ namespace PostMatch.Api.Controllers
         {
             var post = _iPostService.GetById(id);
             var postModel = _iMapper.Map<PostModels>(post);
-            var company = _iCompanyService.GetById(post.CompanyId);
+            var company = _iCompanyService.GetById(postModel.CompanyId);
             var companyModel = _iMapper.Map<CompanyUserModel>(company);
             postModel.company = companyModel;
             var count = 1;
@@ -135,7 +121,7 @@ namespace PostMatch.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            var post = _iCompanyService.GetById(id);
+            var post = _iPostService.GetById(id);
             var count = 1;
             if (post == null)
             {
@@ -144,7 +130,7 @@ namespace PostMatch.Api.Controllers
             try
             {
                 // save 
-                _iCompanyService.Delete(id);
+                _iPostService.Delete(id);
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id

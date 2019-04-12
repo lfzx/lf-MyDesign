@@ -13,16 +13,25 @@ namespace PostMatch.Api.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public DateTime UpdateTime { get; set; }
+        public int Gender { get; set; }
+        public string Academic { get; set; }
+        public string School { get; set; }
+        public string EntranceTime { get; set; }
+        public string GraduationTime { get; set; }
+        public string Profession { get; set; }
     }
 
-    public class LoginRequest
+    public class ResponseUserModel
     {
-        [Required(ErrorMessage = "邮箱不能为空")]
-        [EmailAddress(ErrorMessage = "邮箱格式不正确")]
-        public string email { get; set; }
-
-        [Required(ErrorMessage = "密码不能为空")]
-        public string password { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public DateTime UpdateTime { get; set; }
+        public int Gender { get; set; }
+        public string Academic { get; set; }
+        public string School { get; set; }
+        public string EntranceTime { get; set; }
+        public string GraduationTime { get; set; }
+        public string Profession { get; set; }
     }
 
     public class LoginResponse
@@ -38,6 +47,30 @@ namespace PostMatch.Api.Models
         public string email { get; set; }
 
         public string avatar { get; set; }
+    }
+
+    public class UserLoginResponse
+    {
+        public string token { get; set; }
+
+        public string name { get; set; }
+
+        public int roleid { get; set; }
+
+        public string id { get; set; }
+
+        public string resumeid { get; set; }
+
+        public string email { get; set; }
+
+        public string avatar { get; set; }
+
+        public int gender { get; set; }
+        public string school { get; set; }
+        public string entranceTime { get; set; }
+        public string graduationTime { get; set; }
+        public string profession { get; set; }
+        public string academic { get; set; }
     }
 
     public class DeleteOrUpdateResponse
@@ -61,6 +94,34 @@ namespace PostMatch.Api.Models
         public string Password { get; set; }
     }
 
+    public class CompanyLoginResponse
+    {
+        public string token { get; set; }
+        public string name { get; set; }
+        public int roleid { get; set; }
+        public string id { get; set; }
+        public string email { get; set; }
+        public string avatar { get; set; }
+
+        public string OrganizationCode { get; set; }
+        public string PersonalNumber { get; set; }
+        public string CompanyDescription { get; set; }
+        public string CompanyUrl { get; set; }
+    }
+
+    public class ResponseCompanyUserModel
+    {
+        public string CompanyId { get; set; }
+        public string Avatar { get; set; }
+        public string CompanyName { get; set; }
+        public string OrganizationCode { get; set; }
+        public string PersonalNumber { get; set; }
+        public string CompanyDescription { get; set; }
+        public string CompanyUrl { get; set; }
+        public int Status { get; set; }
+        public DateTime UpdateTime { get; set; }
+    }
+
     public class AdministratorModel
     {
         public string AdminId { get; set; }
@@ -78,20 +139,36 @@ namespace PostMatch.Api.Models
         public string ResumeId { get; set; }
         public string UserId { get; set; }
         public string ResumeAvatar { get; set; }
-        public int Gender { get; set; }
         public string ResumeTelephoneNumber { get; set; }
         public string FamilyAddress { get; set; }
         public string ResumePostName { get; set; }
         public string ResumeSalary { get; set; }
         public string ResumeWorkPlace { get; set; }
         public string ResumeJobType { get; set; }
-        public string Academic { get; set; }
         public string ResumeExperience { get; set; }
         public string Skill { get; set; }
         public int IsEnable { get; set; }
         public DateTime ResumeUpdateTime { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public string Birth { get; set; }
+    }
+
+    public class ResponseResumeModel
+    {
+        public string ResumeId { get; set; }
+        public string UserId { get; set; }
+        public string ResumeAvatar { get; set; }
+        public string ResumeTelephoneNumber { get; set; }
+        public string FamilyAddress { get; set; }
+        public string ResumePostName { get; set; }
+        public string ResumeSalary { get; set; }
+        public string ResumeWorkPlace { get; set; }
+        public string ResumeJobType { get; set; }
+        public string ResumeExperience { get; set; }
+        public string Skill { get; set; }
+        public DateTime ResumeUpdateTime { get; set; }
+
+        public string Birth { get; set; }
+        public ResponseUserModel responseUserModel = new ResponseUserModel();
     }
 
     public class PostModel
@@ -134,7 +211,7 @@ namespace PostMatch.Api.Models
         public CompanyUserModel company = new CompanyUserModel();
     }
 
-    public class RecommendModel
+   public class RecommendModel
     {
         public string RecommendId { get; set; }
         public string ResumeId { get; set; }
@@ -153,8 +230,8 @@ namespace PostMatch.Api.Models
         
         public PostModel postModel = new PostModel();
         public ResumeModel resumeModel = new ResumeModel();
-        public UserModel userModel = new UserModel();
-        public CompanyUserModel companyUserModel = new CompanyUserModel();
+        public ResponseUserModel userModel = new ResponseUserModel();
+        public ResponseCompanyUserModel companyUserModel = new ResponseCompanyUserModel();
     }
 
     public class DeliveryModel
@@ -174,8 +251,8 @@ namespace PostMatch.Api.Models
 
         public PostModel postModel = new PostModel();
         public ResumeModel resumeModel = new ResumeModel();
-        public UserModel userModel = new UserModel();
-        public CompanyUserModel companyUserModel = new CompanyUserModel();
+        public ResponseUserModel userModel = new ResponseUserModel();
+        public ResponseCompanyUserModel companyUserModel = new ResponseCompanyUserModel();
     }
 
 }

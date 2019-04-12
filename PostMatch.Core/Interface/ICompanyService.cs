@@ -1,5 +1,6 @@
 ﻿using PostMatch.Core.Entities;
 using System.Collections.Generic;
+using System.Data;
 
 namespace PostMatch.Core.Interface
 {
@@ -12,5 +13,6 @@ namespace PostMatch.Core.Interface
         void Update(Companies companies, string password = null);
         void Patch(Companies companies, string password);
         void Delete(string id);
+        DataSet GetByName(string id);
     }
 }

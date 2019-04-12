@@ -34,6 +34,11 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
             return _context.Post;
         }
 
+        //public Post GetByCompanyId(string id)
+        //{
+        //    return _context.Post.SingleOrDefault(x => x.CompanyId == id); 
+        //}
+
         public Post GetById(string id)
         {
             return _context.Post.Find(id);

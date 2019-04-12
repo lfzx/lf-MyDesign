@@ -1,9 +1,11 @@
-﻿using PostMatch.Core.Entities;
+﻿using MySql.Data.MySqlClient;
+using PostMatch.Core.Entities;
 using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using PostMatch.Infrastructure.DataAccess.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace PostMatch.Infrastructure.Services
 {
@@ -212,6 +214,17 @@ namespace PostMatch.Infrastructure.Services
             }
 
             return true;
+        }
+
+        DataSet ICompanyService.GetByName(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from post where companyId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
         }
     }
 }

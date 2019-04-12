@@ -40,6 +40,11 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
             return _context.Resume.Find(id);
         }
 
+        public Resume GetByUserId(string id)
+        {
+            return _context.Resume.SingleOrDefault(x => x.UserId == id); ;
+        }
+
         public int Remove(Resume resume)
         {
             _context.Resume.Remove(resume);

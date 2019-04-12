@@ -10,6 +10,7 @@ namespace PostMatch.Infrastructure.DataAccess.Interface
     {
         IEnumerable<Resume> GetAll();
         Resume GetById(string id);
+        Resume GetByUserId(string id);
         bool Any(Expression<Func<Resume, bool>> predicate);
         int Add(Resume resume);
         int Update(Resume resume);

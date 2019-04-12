@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using PostMatch.Api.Helpers;
 using PostMatch.Api.Models;
 using PostMatch.Core.Entities;
 using PostMatch.Core.Helpers;
@@ -10,7 +8,6 @@ using PostMatch.Core.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PostMatch.Api.Controllers
 {
@@ -47,23 +44,9 @@ namespace PostMatch.Api.Controllers
                 var count = 1;
                 if (result != null)
                 {
-                    return Output(new ResumeModel
+                    return Output(new DeleteOrUpdateResponse
                     {
-                        ResumeId = result.ResumeId,
-                        UserId = result.UserId,
-                        ResumeAvatar = result.ResumeAvatar,
-                        Gender = result.Gender,
-                        ResumeTelephoneNumber = result.ResumeTelephoneNumber,
-                        FamilyAddress = result.FamilyAddress,
-                        ResumePostName = result.ResumePostName,
-                        ResumeSalary = result.ResumeSalary,
-                        ResumeWorkPlace = result.ResumeWorkPlace,
-                        ResumeJobType = result.ResumeJobType,
-                        Academic = result.Academic,
-                        ResumeExperience = result.ResumeExperience,
-                        Skill = result.Skill,
-                        IsEnable = result.IsEnable,
-                        ResumeUpdateTime = result.ResumeUpdateTime
+                        id = result.ResumeId,
                     }, count);
                 }
                 throw new Exception("创建失败！");
@@ -95,10 +78,10 @@ namespace PostMatch.Api.Controllers
         public IActionResult GetById(string id)
         {
             var resume = _iResumeService.GetById(id);
-            var resumeModel = _iMapper.Map<ResumeModel>(resume);
+            var resumeModel = _iMapper.Map<ResponseResumeModel>(resume);
             var user = _iUserService.GetById(resume.UserId);
-            resumeModel.Name = user.Name;
-            resumeModel.Email = user.Email;
+            var userModel = _iMapper.Map<ResponseUserModel>(user);
+            resumeModel.responseUserModel= userModel;
             var count = 1;
             if (resumeModel != null)
             {

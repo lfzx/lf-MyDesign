@@ -13,7 +13,9 @@ namespace PostMatch.Infrastructure.Services
         private readonly IPostRepository _iPostRepository;
         private readonly ICompanyRepository _iCompanyRepository;
 
-        public PostService(IPostRepository iPostRepository, ICompanyRepository iCompanyRepository)
+        public PostService(
+            IPostRepository iPostRepository,
+            ICompanyRepository iCompanyRepository)
         {
             _iPostRepository = iPostRepository;
             _iCompanyRepository = iCompanyRepository;
@@ -66,6 +68,11 @@ namespace PostMatch.Infrastructure.Services
         {
             return _iPostRepository.GetAll();
         }
+
+        //public Post GetByCompanyId(string id)
+        //{
+        //    return _iPostRepository.GetByCompanyId(id);
+        //}
 
         public Post GetById(string id)
         {
