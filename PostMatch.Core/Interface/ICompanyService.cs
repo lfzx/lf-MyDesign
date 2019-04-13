@@ -14,5 +14,8 @@ namespace PostMatch.Core.Interface
         void Patch(Companies companies, string password);
         void Delete(string id);
         DataSet GetByName(string id);
+        DataSet GetByIdForDelivery(string id);
+        DataSet GetByIdForRecommend(string id);
+        DataSet GetByIdForInterview(string id);
     }
 }

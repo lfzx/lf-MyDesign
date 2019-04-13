@@ -73,6 +73,8 @@ namespace PostMatch.Api
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.AddScoped<IRecommendService, RecommendService>();
             services.AddScoped<IRecommendRepository, RecommendRepository>();
+            services.AddScoped<IInterviewService, InterviewService>();
+            services.AddScoped<IInterviewRepository, InterviewRepository>();
 
             // 配置强类型设置对象
             var appSettingsSection = _configuration.GetSection("AppSettings");

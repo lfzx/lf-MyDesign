@@ -13,6 +13,7 @@ namespace PostMatch.Infrastructure.DataAccess.Interface
         bool Any(Expression<Func<Delivery, bool>> predicate);
         int Add(Delivery delivery);
         int Update(Delivery delivery);
+        int Patch(Delivery delivery);
         int Remove(Delivery delivery);
     }
 }

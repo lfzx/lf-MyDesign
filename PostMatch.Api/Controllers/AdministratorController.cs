@@ -125,7 +125,15 @@ namespace PostMatch.Api.Controllers
             if (userModel != null)
             {
 
-                return Output(userModel,count);
+                return Output(new UserModel
+                {
+                    
+                    Avatar = userModel.Avatar,
+                    Email = userModel.Email,
+                    Name = userModel.AdminName,
+                    School = userModel.School,
+                    Id= userModel.AdminId
+                }, count);
             }
             throw new Exception("该用户不存在");
 

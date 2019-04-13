@@ -33,6 +33,10 @@ namespace PostMatch.Api.Helpers
             CreateMap<Post, PostModels>();
             CreateMap<CompanyUserModel, Companies>();
             CreateMap<Companies, CompanyUserModel>();
+            CreateMap<Interview, InterviewModel>();
+            CreateMap<InterviewModel, Interview>();
+            CreateMap<Interview, InterviewModels>();
+            CreateMap<InterviewModels, InterviewModel>();
 
         }
     }

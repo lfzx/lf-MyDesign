@@ -226,5 +226,38 @@ namespace PostMatch.Infrastructure.Services
 
             return dataSet;
         }
+
+        public DataSet GetByIdForDelivery(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from deliveries where companyId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
+
+        public DataSet GetByIdForRecommend(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from recommend where companyId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
+
+        public DataSet GetByIdForInterview(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from interviews where companyId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace PostMatch.Infrastructure.DataAccess.Interface
         bool Any(Expression<Func<Recommend, bool>> predicate);
         int Add(Recommend recommend);
         int Update(Recommend recommend);
+        int Patch(Recommend recommend);
         int Remove(Recommend recommend);
     }
 }

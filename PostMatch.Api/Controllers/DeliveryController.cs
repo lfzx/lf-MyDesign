@@ -94,13 +94,13 @@ namespace PostMatch.Api.Controllers
             var delivery = _iDeliveryService.GetById(id);
             var deliveryModel = _iMapper.Map<DeliveryModels>(delivery);
            
-            var post = _iPostService.GetById(deliveryModel.PostId);
+            var post = _iPostService.GetById(delivery.PostId);
             var postModel = _iMapper.Map<PostModel>(post);
-            var resume = _iResumeService.GetById(deliveryModel.ResumeId);
+            var resume = _iResumeService.GetById(delivery.ResumeId);
             var resumeModel = _iMapper.Map<ResumeModel>(resume);
-            var company = _iCompanyService.GetById(postModel.CompanyId);
+            var company = _iCompanyService.GetById(post.CompanyId);
             var companyModel = _iMapper.Map<ResponseCompanyUserModel>(company);
-            var user = _iUserService.GetById(resumeModel.UserId);
+            var user = _iUserService.GetById(resume.UserId);
             var userModel = _iMapper.Map<ResponseUserModel>(user);
 
             deliveryModel.postModel = postModel;
@@ -160,6 +160,30 @@ namespace PostMatch.Api.Controllers
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
+                }, count);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult Patch(string id, [FromBody]DeliveryModel deliveryModel)
+        {
+            // map dto to entity and set id
+            var user = _iMapper.Map<Delivery>(deliveryModel);
+            user.DeliveryId = id;
+            var count = 1;
+
+            try
+            {
+                // save 
+                _iDeliveryService.Patch(user);
+                return Output(new DeleteOrUpdateResponse
+                {
+                    id = user.DeliveryId,
                 }, count);
             }
             catch (AppException ex)

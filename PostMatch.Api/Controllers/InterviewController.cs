@@ -15,51 +15,49 @@ namespace PostMatch.Api.Controllers
     [Route("api/passport/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class RecommendController : ControllerApiBase
+    public class InterviewController : ControllerApiBase
     {
         private readonly IUserService _iUserService;
         private readonly IResumeService _iResumeService;
         private readonly ICompanyService _iCompanyService;
         private readonly IPostService _iPostService;
-        private readonly IRecommendService _iRecommendService;
+        private readonly IInterviewService _iInterviewService;
         private readonly IMapper _iMapper;
 
-        public RecommendController(
+        public InterviewController(
             IUserService iUserService,
             IResumeService iResumeService,
             ICompanyService iCompanyService,
             IPostService iPostService,
-            IRecommendService iRecommendService,
+            IInterviewService iInterviewService,
             IMapper iMapper)
         {
             _iCompanyService = iCompanyService;
             _iPostService = iPostService;
-            _iRecommendService = iRecommendService;
+            _iInterviewService = iInterviewService;
             _iUserService = iUserService;
             _iResumeService = iResumeService;
             _iMapper = iMapper;
         }
 
+
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]RecommendModel recommendModel)
+        public IActionResult Register([FromBody]InterviewModel interviewModel)
         {
             // map dto to entity
-            var recommend = _iMapper.Map<Recommend>(recommendModel);
+            var interview = _iMapper.Map<Interview>(interviewModel);
 
             try
             {
                 // save 
-                var result = _iRecommendService.Create(
-                    recommend,
-                    recommendModel.PostId,
-                    recommendModel.ResumeId);
+                var result = _iInterviewService.Create(interview, interview.PostId, interview.ResumeId);
                 var count = 1;
                 if (result != null)
                 {
                     return Output(new DeleteOrUpdateResponse
                     {
-                        id = result.RecommendId,
+                        id = result.InterviewId,
                     }, count);
                 }
                 throw new Exception("创建失败！");
@@ -75,13 +73,13 @@ namespace PostMatch.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var recommends = _iRecommendService.GetAll();
-            var recommendModels = _iMapper.Map<IList<RecommendModel>>(recommends);
-            var count = recommendModels.Count();
-            if (recommendModels != null)
+            var interviews = _iInterviewService.GetAll();
+            var interviewModels = _iMapper.Map<IList<InterviewModel>>(interviews);
+            var count = interviewModels.Count();
+            if (interviewModels != null)
             {
 
-                return Output(recommendModels, count);
+                return Output(interviewModels, count);
             }
             throw new Exception("没有数据");
 
@@ -90,46 +88,47 @@ namespace PostMatch.Api.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
-            var recommend = _iRecommendService.GetById(id);
-            var recommendModel = _iMapper.Map<RecommendModels>(recommend);
-            var post = _iPostService.GetById(recommendModel.PostId);
+            var interview = _iInterviewService.GetById(id);
+            var interviewModels = _iMapper.Map<InterviewModels>(interview);
+
+            var post = _iPostService.GetById(interview.PostId);
             var postModel = _iMapper.Map<PostModel>(post);
-            var resume= _iResumeService.GetById(recommendModel.ResumeId);
+            var resume = _iResumeService.GetById(interview.ResumeId);
             var resumeModel = _iMapper.Map<ResumeModel>(resume);
             var company = _iCompanyService.GetById(post.CompanyId);
             var companyModel = _iMapper.Map<ResponseCompanyUserModel>(company);
             var user = _iUserService.GetById(resume.UserId);
             var userModel = _iMapper.Map<ResponseUserModel>(user);
 
-            recommendModel.postModel = postModel;
-            recommendModel.resumeModel = resumeModel;
-            recommendModel.companyUserModel = companyModel;
-            recommendModel.userModel = userModel;
+            interviewModels.postModel = postModel;
+            interviewModels.resumeModel = resumeModel;
+            interviewModels.companyUserModel = companyModel;
+            interviewModels.userModel = userModel;
 
             var count = 1;
-            if (recommendModel != null)
+            if (resumeModel != null)
             {
 
                 return Output(
-                    recommendModel,
+                    interviewModels,
                      count);
             }
-            throw new Exception("该推荐不存在");
+            throw new Exception("该面试邀请不存在");
 
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody]RecommendModel recommendModel)
+        public IActionResult Update(string id, [FromBody]InterviewModel interviewModel)
         {
             // map dto to entity and set id
-            var recommend = _iMapper.Map<Recommend>(recommendModel);
-            recommend.RecommendId = id;
+            var interview = _iMapper.Map<Interview>(interviewModel);
+            interview.InterviewId = id;
             var count = 1;
 
             try
             {
                 // save 
-                _iRecommendService.Update(recommend);
+                _iInterviewService.Update(interview);
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
@@ -145,16 +144,16 @@ namespace PostMatch.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            var recommend = _iRecommendService.GetById(id);
+            var interview = _iInterviewService.GetById(id);
             var count = 1;
-            if (recommend == null)
+            if (interview == null)
             {
-                throw new Exception("该推荐不存在");
+                throw new Exception("该面试邀请不存在");
             }
             try
             {
                 // save 
-                _iRecommendService.Delete(id);
+                _iInterviewService.Delete(id);
                 return Output(new DeleteOrUpdateResponse
                 {
                     id = id
@@ -168,20 +167,20 @@ namespace PostMatch.Api.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult Patch(string id, [FromBody]RecommendModel recommendModel)
+        public IActionResult Patch(string id, [FromBody]InterviewModel interviewModel)
         {
             // map dto to entity and set id
-            var user = _iMapper.Map<Recommend>(recommendModel);
-            user.RecommendId = id;
+            var user = _iMapper.Map<Interview>(interviewModel);
+            user.InterviewId = id;
             var count = 1;
 
             try
             {
                 // save 
-                _iRecommendService.Patch(user);
+                _iInterviewService.Patch(user);
                 return Output(new DeleteOrUpdateResponse
                 {
-                    id = user.RecommendId,
+                    id = user.InterviewId,
                 }, count);
             }
             catch (AppException ex)

@@ -4,13 +4,13 @@ using System.Text;
 
 namespace PostMatch.Core.Entities
 {
-    public class Delivery
+    public class Interview
     {
-        public string DeliveryId { get; set; }
+        public string InterviewId { get; set; }
         public string ResumeId { get; set; }
         public string PostId { get; set; }
-        public DateTime DeliveryUpdateTime { get; set; }
+        public DateTime InterviewUpdateTime { get; set; }
         public string CompanyId { get; set; }
-        public int CompanyResponse { get; set; }
+        public int UserResponse { get; set; }
     }
 }

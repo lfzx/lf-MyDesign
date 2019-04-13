@@ -11,7 +11,7 @@ namespace PostMatch.Core.Interface
         Recommend GetById(string id);
         Recommend Create(Recommend recommend, string postId, string resumeId);
         void Update(Recommend recommend);
-        void Patch(Recommend recommend, string userId);
+        void Patch(Recommend recommend);
         void Delete(string id);
     }
 }

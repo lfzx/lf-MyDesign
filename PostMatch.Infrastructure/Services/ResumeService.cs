@@ -1,9 +1,11 @@
-﻿using PostMatch.Core.Entities;
+﻿using MySql.Data.MySqlClient;
+using PostMatch.Core.Entities;
 using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using PostMatch.Infrastructure.DataAccess.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace PostMatch.Infrastructure.Services
@@ -75,6 +77,17 @@ namespace PostMatch.Infrastructure.Services
             return _iResumeRepository.GetById(id);
         }
 
+        public DataSet GetByResumeForRecommend(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from recommend where resumeId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
+
         public Resume GetByUserId(string id)
         {
             return _iResumeRepository.GetByUserId(id);
@@ -140,6 +153,28 @@ namespace PostMatch.Infrastructure.Services
             resumes.IsEnable = 1;
 
             _iResumeRepository.Update(resumes);
+        }
+
+        public DataSet GetByIdForDelivery(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from deliveries where resumeId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
+
+        public DataSet GetByIdForInterview(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "select * from interviews where resumeId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
         }
     }
 }

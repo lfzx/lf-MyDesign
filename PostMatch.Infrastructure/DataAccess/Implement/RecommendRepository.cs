@@ -50,5 +50,11 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
             _context.Recommend.Update(recommend);
             return _context.SaveChanges();
         }
+
+        public int Patch(Recommend recommend)
+        {
+            _context.Recommend.Attach(recommend);
+            return _context.SaveChanges();
+        }
     }
 }

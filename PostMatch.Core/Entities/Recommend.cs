@@ -11,5 +11,8 @@ namespace PostMatch.Core.Entities
         public string ResumeId { get; set; }
         public string RecommendNumber { get; set; }
         public DateTime RecommendUpdateTime { get; set; }
+        public string Score { get; set; }
+        public string CompanyScore { get; set; }
+        public string CompanyId { get; set; }
     }
 }

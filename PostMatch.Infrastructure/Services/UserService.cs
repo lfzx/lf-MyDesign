@@ -1,10 +1,11 @@
-﻿using PostMatch.Core.Entities;
+﻿using MySql.Data.MySqlClient;
+using PostMatch.Core.Entities;
 using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using PostMatch.Infrastructure.DataAccess.Interface;
 using System;
 using System.Collections.Generic;
-
+using System.Data;
 
 namespace PostMatch.Infrastructure.Services
 {
@@ -201,6 +202,5 @@ namespace PostMatch.Infrastructure.Services
 
             return true;
         }
-
     }
 }

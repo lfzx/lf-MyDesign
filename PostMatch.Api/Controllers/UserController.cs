@@ -9,6 +9,7 @@ using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -102,9 +103,9 @@ namespace PostMatch.Api.Controllers
                 var count = 1;
                 if (result != null)
                 {
-                    return Output(new LoginResponse
+                    return Output(new DeleteOrUpdateResponse
                     {
-                        email = user.Email,
+                        id = user.Id,
                     },count);
                 }
                 throw new Exception("注册失败！");
@@ -219,6 +220,5 @@ namespace PostMatch.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
     }
 }

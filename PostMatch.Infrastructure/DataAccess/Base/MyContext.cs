@@ -20,6 +20,7 @@ namespace PostMatch.Infrastructure.DataBase
         public DbSet<Post> Post { get; set; }
         public DbSet<Recommend> Recommend { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<Interview> Interviews { get; set; }
 
     }
 }

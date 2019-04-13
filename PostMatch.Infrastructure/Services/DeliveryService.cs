@@ -47,10 +47,16 @@ namespace PostMatch.Infrastructure.Services
                 throw new AppException("该简历不存在！");
             }
 
+            if (delivery.CompanyId == null)
+            {
+                throw new AppException("该公司不存在！");
+            }
+
             delivery.DeliveryId = Guid.NewGuid().ToString();
 
             delivery.PostId = postId;
             delivery.ResumeId = resumeId;
+            delivery.CompanyId = delivery.CompanyId;
             delivery.DeliveryUpdateTime = DateTime.Now;
 
             _iDeliveryRepository.Add(delivery);
@@ -77,9 +83,33 @@ namespace PostMatch.Infrastructure.Services
             return _iDeliveryRepository.GetById(id);
         }
 
-        public void Patch(Delivery delivery, string userId)
+        public void Patch(Delivery delivery)
         {
-            throw new NotImplementedException();
+            var deliveries = _iDeliveryRepository.GetById(delivery.DeliveryId);
+
+            if (deliveries == null)
+                throw new AppException("该投递不存在！");
+
+            // update user properties
+            if (delivery.PostId != null)
+            {
+                deliveries.PostId = delivery.PostId;
+            }
+            if (delivery.ResumeId != null)
+            {
+                deliveries.ResumeId = delivery.ResumeId;
+            }
+            if (delivery.CompanyId != null)
+            {
+                deliveries.CompanyId = delivery.CompanyId;
+            }
+            deliveries.PostId = deliveries.PostId;
+            deliveries.ResumeId = deliveries.ResumeId;
+            deliveries.CompanyId = deliveries.CompanyId;
+            deliveries.CompanyResponse = delivery.CompanyResponse;
+            deliveries.DeliveryUpdateTime = DateTime.Now;
+
+            _iDeliveryRepository.Patch(deliveries);
         }
 
         public void Update(Delivery delivery)

@@ -7,6 +7,7 @@ using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace PostMatch.Api.Controllers
@@ -90,6 +91,38 @@ namespace PostMatch.Api.Controllers
             }
             throw new Exception("该简历不存在");
 
+        }
+
+        [HttpGet("recommend/{id}")]
+        public IActionResult GetByCompanyId(string id)
+        {
+            DataSet item = _iResumeService.GetByResumeForRecommend(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+
+            return Output(item, count);
+        }
+
+        [HttpGet("delivery/{id}")]
+        public IActionResult GetByIdForDelivery(string id)
+        {
+            DataSet item = _iResumeService.GetByIdForDelivery(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+            return Output(item, count);
+        }
+
+        [HttpGet("interview/{id}")]
+        public IActionResult GetByIdForInterview(string id)
+        {
+            DataSet item = _iResumeService.GetByIdForInterview(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+            return Output(item, count);
         }
 
         [HttpPut("{id}")]

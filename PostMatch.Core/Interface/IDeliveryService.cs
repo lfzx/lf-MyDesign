@@ -11,7 +11,7 @@ namespace PostMatch.Core.Interface
         Delivery GetById(string id);
         Delivery Create(Delivery delivery, string postId, string resumeId);
         void Update(Delivery delivery);
-        void Patch(Delivery delivery, string userId);
+        void Patch(Delivery delivery);
         void Delete(string id);
     }
 }

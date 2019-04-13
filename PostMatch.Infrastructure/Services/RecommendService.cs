@@ -47,11 +47,16 @@ namespace PostMatch.Infrastructure.Services
             {
                 throw new AppException("该简历不存在！");
             }
+            if (recommend.CompanyId == null)
+            {
+                throw new AppException("该公司不存在！");
+            }
 
             recommend.RecommendId = Guid.NewGuid().ToString();
 
             recommend.PostId = postId;
             recommend.ResumeId = resumeId;
+            recommend.CompanyId = recommend.CompanyId;
             recommend.RecommendNumber = recommend.RecommendNumber;
             recommend.RecommendUpdateTime = DateTime.Now;
 
@@ -79,9 +84,47 @@ namespace PostMatch.Infrastructure.Services
             return _iRecommendRepository.GetById(id);
         }
 
-        public void Patch(Recommend recommend, string userId)
+        public void Patch(Recommend recommend)
         {
-            throw new NotImplementedException();
+            var recommends = _iRecommendRepository.GetById(recommend.RecommendId);
+
+            if (recommends == null)
+                throw new AppException("该推荐不存在！");
+
+            // update user properties
+            if (recommend.PostId != null)
+            {
+                recommends.PostId = recommend.PostId;
+            }
+            if (recommend.ResumeId != null)
+            {
+                recommends.ResumeId = recommend.ResumeId;
+            }
+            if (recommend.CompanyId != null)
+            {
+                recommends.CompanyId = recommend.CompanyId;
+            }
+            if (recommend.RecommendNumber != null)
+            {
+                recommends.RecommendNumber = recommend.RecommendNumber;
+            }
+            if (recommend.CompanyScore != null)
+            {
+                recommends.CompanyScore = recommend.CompanyScore;
+            }
+            if (recommend.Score != null)
+            {
+                recommends.Score = recommend.Score;
+            }
+            recommends.PostId = recommends.PostId;
+            recommends.ResumeId = recommends.ResumeId;
+            recommends.CompanyId = recommends.CompanyId;
+            recommends.RecommendNumber = recommends.RecommendNumber;
+            recommends.Score = recommends.Score;
+            recommends.CompanyScore = recommends.CompanyScore;
+            recommends.RecommendUpdateTime = DateTime.Now;
+
+            _iRecommendRepository.Patch(recommends);
         }
 
         public void Update(Recommend recommend)

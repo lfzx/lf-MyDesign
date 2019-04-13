@@ -39,6 +39,12 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
             return _context.Deliveries.Find(id);
         }
 
+        public int Patch(Delivery delivery)
+        {
+            _context.Deliveries.Attach(delivery);
+            return _context.SaveChanges();
+        }
+
         public int Remove(Delivery delivery)
         {
             _context.Deliveries.Remove(delivery);

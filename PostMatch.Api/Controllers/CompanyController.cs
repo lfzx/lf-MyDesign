@@ -64,7 +64,7 @@ namespace PostMatch.Api.Controllers
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
                 var count = 1;
-
+       
                 return Output(new CompanyLoginResponse
                 {
                     token = tokenString,
@@ -96,9 +96,9 @@ namespace PostMatch.Api.Controllers
                 var result = _iCompanyService.Create(user, userModel.Password);
                 if (result != null)
                 {
-                    return Output(new LoginResponse
+                    return Output(new DeleteOrUpdateResponse
                     {
-                        email = user.Email,
+                        id = user.CompanyId,
                     },count);
                 }
                 throw new Exception("注册失败！");
@@ -135,14 +135,23 @@ namespace PostMatch.Api.Controllers
             if (userModel != null)
             {
 
-                return Output(userModel,count);
+                return Output(new CompanyLoginResponse {
+                    avatar = userModel.Avatar,
+                    email = userModel.Email,
+                    name = userModel.CompanyName,
+                    id = userModel.CompanyId,
+                    OrganizationCode = userModel.OrganizationCode,
+                    PersonalNumber = userModel.PersonalNumber,
+                    CompanyDescription = userModel.CompanyDescription,
+                    CompanyUrl = userModel.CompanyUrl,
+                }, count);
             }
             throw new Exception("该公司未注册");
 
         }
 
         [HttpGet("post/{id}")]
-        public IActionResult GetByCompanyId(string id)
+        public IActionResult GetByCompanyIdForPost(string id)
         {
             DataSet item = _iCompanyService.GetByName(id);
             var count = item.Tables[0].Rows.Count;
@@ -150,6 +159,39 @@ namespace PostMatch.Api.Controllers
                 return null;
 
             return Output(item,count);
+        }
+
+        [HttpGet("delivery/{id}")]
+        public IActionResult GetByCompanyIdForDelivery(string id)
+        {
+            DataSet item = _iCompanyService.GetByIdForDelivery(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+            return Output(item, count);
+        }
+
+        [HttpGet("recommend/{id}")]
+        public IActionResult GetByCompanyIdForRecommend(string id)
+        {
+            DataSet item = _iCompanyService.GetByIdForRecommend(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+            return Output(item, count);
+        }
+
+        [HttpGet("interview/{id}")]
+        public IActionResult GetByCompanyIdForInterview(string id)
+        {
+            DataSet item = _iCompanyService.GetByIdForInterview(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+            return Output(item, count);
         }
 
         [HttpPut("{id}")]

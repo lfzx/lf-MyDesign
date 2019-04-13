@@ -218,6 +218,9 @@ namespace PostMatch.Api.Models
         public string PostId { get; set; }
         public string RecommendNumber { get; set; }
         public DateTime RecommendUpdateTime { get; set; }
+        public string Score { get; set; }
+        public string CompanyScore { get; set; }
+        public string CompanyId { get; set; }
     }
 
     public class RecommendModels
@@ -227,7 +230,10 @@ namespace PostMatch.Api.Models
         public string ResumeId { get; set; }
         public string RecommendNumber { get; set; }
         public DateTime UpdateTime { get; set; }
-        
+        public string Score { get; set; }
+        public string CompanyScore { get; set; }
+        public string CompanyId { get; set; }
+
         public PostModel postModel = new PostModel();
         public ResumeModel resumeModel = new ResumeModel();
         public ResponseUserModel userModel = new ResponseUserModel();
@@ -240,6 +246,8 @@ namespace PostMatch.Api.Models
         public string PostId { get; set; }
         public string ResumeId { get; set; }
         public DateTime DeliveryUpdateTime { get; set; }
+        public string CompanyId { get; set; }
+        public int CompanyResponse { get; set; }
     }
 
     public class DeliveryModels
@@ -248,6 +256,33 @@ namespace PostMatch.Api.Models
         public string PostId { get; set; }
         public string ResumeId { get; set; }
         public DateTime DeliveryUpdateTime { get; set; }
+        public string CompanyId { get; set; }
+        public int CompanyResponse { get; set; }
+
+        public PostModel postModel = new PostModel();
+        public ResumeModel resumeModel = new ResumeModel();
+        public ResponseUserModel userModel = new ResponseUserModel();
+        public ResponseCompanyUserModel companyUserModel = new ResponseCompanyUserModel();
+    }
+
+    public class InterviewModel
+    {
+        public string InterviewId { get; set; }
+        public string ResumeId { get; set; }
+        public string PostId { get; set; }
+        public DateTime InterviewUpdateTime { get; set; }
+        public string CompanyId { get; set; }
+        public int UserResponse { get; set; }
+    }
+
+    public class InterviewModels
+    {
+        public string InterviewId { get; set; }
+        public string ResumeId { get; set; }
+        public string PostId { get; set; }
+        public DateTime InterviewUpdateTime { get; set; }
+        public string CompanyId { get; set; }
+        public int UserResponse { get; set; }
 
         public PostModel postModel = new PostModel();
         public ResumeModel resumeModel = new ResumeModel();

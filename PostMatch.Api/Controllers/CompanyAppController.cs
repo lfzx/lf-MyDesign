@@ -54,21 +54,19 @@ namespace PostMatch.Api.Controllers
                         group = true,
                         children = new List<Menu>()
                         {
-                            new Menu()
-                            {
-                                text = "业务处理",
-                                icon = "anticon anticon-skin",
-                                children = new List<Menu>()
-                                {
                                     new Menu()
                                     {
                                         text = "投递情况",
                                         link = "/company/deliveries",
                                         icon = "anticon anticon-check-circle"
+                                    },
+                                      new Menu()
+                                    {
+                                        text = "面试邀请",
+                                        link = "/company/inerview",
+                                        icon = "anticon anticon-link"
                                     }
                                 }
-                            }
-                        }
                     }
                 }
             },count);
