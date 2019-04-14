@@ -12,6 +12,7 @@ namespace PostMatch.Core.Interface
         User Create(User user, string password);
         void Update(User user, string password = null);
         void Patch(User user, string password);
+        void EditPassword(User user, string password);
         void Delete(string id);
 
     }

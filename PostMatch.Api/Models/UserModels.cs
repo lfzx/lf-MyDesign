@@ -12,6 +12,7 @@ namespace PostMatch.Api.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public string NewPassword { get; set; }
         public DateTime UpdateTime { get; set; }
         public int Gender { get; set; }
         public string Academic { get; set; }
@@ -92,6 +93,7 @@ namespace PostMatch.Api.Models
         public int Status { get; set; }
         public DateTime UpdateTime { get; set; }
         public string Password { get; set; }
+        public string NewPassword { get; set; }
     }
 
     public class CompanyLoginResponse
@@ -130,6 +132,7 @@ namespace PostMatch.Api.Models
         public string Email { get; set; }
         public string School { get; set; }
         public int roleid { get; set; }
+        public string NewPassword { get; set; }
         public DateTime UpdateTime { get; set; }
         public string Password { get; set; }
     }

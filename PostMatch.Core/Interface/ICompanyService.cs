@@ -12,6 +12,8 @@ namespace PostMatch.Core.Interface
         Companies Create(Companies companies, string password);
         void Update(Companies companies, string password = null);
         void Patch(Companies companies, string password);
+        void EditPassword(Companies companies, string password);
+
         void Delete(string id);
         DataSet GetByName(string id);
         DataSet GetByIdForDelivery(string id);

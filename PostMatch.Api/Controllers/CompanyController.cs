@@ -242,6 +242,37 @@ namespace PostMatch.Api.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPut("password/{id}")]
+        public IActionResult EditPassword(string id, [FromBody]CompanyUserModel userModel)
+        {
+            // map dto to entity and set id
+            var user = _iMapper.Map<Companies>(userModel);
+            user.CompanyId = id;
+
+            var result = _iCompanyService.Authenticate(userModel.Email, userModel.Password);
+
+            if (result != null)
+            {
+                try
+                {
+                    // save 
+                    _iCompanyService.EditPassword(user, userModel.NewPassword);
+                    var count = 1;
+                    return Output(new DeleteOrUpdateResponse
+                    {
+                        id = id
+                    }, count);
+                }
+                catch (AppException ex)
+                {
+                    // return error message if there was an exception
+                    return BadRequest(new { message = ex.Message });
+                }
+            }
+            throw new Exception("密码或email错误，请检查");
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
@@ -266,5 +297,6 @@ namespace PostMatch.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
     }
 }

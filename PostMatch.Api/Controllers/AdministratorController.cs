@@ -187,5 +187,36 @@ namespace PostMatch.Api.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [AllowAnonymous]
+        [HttpPut("password/{id}")]
+        public IActionResult EditPassword(string id, [FromBody]AdministratorModel administratorModel)
+        {
+            // map dto to entity and set id
+            var user = _iMapper.Map<Administrator>(administratorModel);
+            user.AdminId = id;
+
+            var result = _iAdministratorService.Authenticate(administratorModel.Email, administratorModel.Password);
+
+            if (result != null)
+            {
+                try
+                {
+                    // save 
+                    _iAdministratorService.EditPassword(user, administratorModel.NewPassword);
+                    var count = 1;
+                    return Output(new DeleteOrUpdateResponse
+                    {
+                        id = id
+                    }, count);
+                }
+                catch (AppException ex)
+                {
+                    // return error message if there was an exception
+                    return BadRequest(new { message = ex.Message });
+                }
+            }
+            throw new Exception("密码或email错误，请检查");
+        }
     }
 }

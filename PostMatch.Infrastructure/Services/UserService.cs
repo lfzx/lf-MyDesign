@@ -109,9 +109,21 @@ namespace PostMatch.Infrastructure.Services
             {
                 throw new AppException("用户名已存在！");
             }
-
+            if (userParam.Avatar == null)
+            {
+                user.Avatar = user.Avatar;
+            }
+            if (userParam.Gender == user.Gender)
+            {
+                user.Gender = user.Gender;
+            }
+            if (userParam.Email == null)
+            {
+                user.Email = user.Email;
+            }
             // update user properties
             user.RoleId = userParam.RoleId;
+            user.Gender = userParam.Gender;
             user.Avatar = userParam.Avatar;
             user.Name = userParam.Name;
             user.UpdateTime = DateTime.Now;
@@ -161,6 +173,25 @@ namespace PostMatch.Infrastructure.Services
             _iUserRepository.Update(user);
         }
 
+        public void EditPassword(User user,string password)
+        {
+            var users = _iUserRepository.GetById(user.Id);
+
+            if (users == null)
+                throw new AppException("该用户不存在！");
+
+            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            // update user properties
+            users.PasswordHash = user.PasswordHash;
+            users.PasswordSalt = user.PasswordSalt;
+            users.UpdateTime = DateTime.Now;
+
+            _iUserRepository.Update(users);
+        }
+
         public void Delete(string id)
         {
             var user = _iUserRepository.GetById(id);
@@ -202,5 +233,6 @@ namespace PostMatch.Infrastructure.Services
 
             return true;
         }
+
     }
 }

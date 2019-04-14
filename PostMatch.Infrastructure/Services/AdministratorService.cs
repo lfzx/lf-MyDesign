@@ -102,7 +102,24 @@ namespace PostMatch.Infrastructure.Services
 
             // update user properties
             user.School = userParam.School;
+            if(userParam.Avatar == null)
+            {
+                user.Avatar = user.Avatar;
+            }
+            if (userParam.AdminName == null)
+            {
+                user.AdminName = user.AdminName;
+            }
+            if (userParam.School == null)
+            {
+                user.School = user.School;
+            }
+            if (userParam.Email == null)
+            {
+                user.Email = user.Email;
+            }
             user.Avatar = userParam.Avatar;
+            user.Email = userParam.Email;
             user.UpdateTime = DateTime.Now;
             user.AdminName = userParam.AdminName;
 
@@ -158,6 +175,25 @@ namespace PostMatch.Infrastructure.Services
             }
 
             return true;
+        }
+
+        public void EditPassword(Administrator administrator, string password)
+        {
+            var users = _iAdministratorRepository.GetById(administrator.AdminId);
+
+            if (users == null)
+                throw new AppException("该管理员不存在！");
+
+            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            administrator.PasswordHash = passwordHash;
+            administrator.PasswordSalt = passwordSalt;
+
+            // update user properties
+            users.PasswordHash = administrator.PasswordHash;
+            users.PasswordSalt = administrator.PasswordSalt;
+            users.UpdateTime = DateTime.Now;
+
+            _iAdministratorRepository.Update(users);
         }
     }
 }

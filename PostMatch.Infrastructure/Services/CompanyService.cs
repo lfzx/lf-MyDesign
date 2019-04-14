@@ -113,11 +113,27 @@ namespace PostMatch.Infrastructure.Services
             {
                 throw new AppException("公司名已存在！");
             }
-
+            if (companies.Avatar == null)
+            {
+                user.Avatar = user.Avatar;
+            }
+            if (companies.CompanyDescription == null)
+            {
+                user.CompanyUrl = user.CompanyUrl;
+            }
+            if (companies.CompanyName == null)
+            {
+                user.CompanyName = user.CompanyName;
+            }
+            if (companies.Email == null)
+            {
+                user.Email = user.Email;
+            }
             // update user properties
             user.CompanyDescription = companies.CompanyDescription;
             user.Avatar = companies.Avatar;
             user.CompanyUrl = companies.CompanyUrl;
+            user.Email = companies.Email;
             user.CompanyName = companies.CompanyName;
             user.UpdateTime = DateTime.Now;
 
@@ -172,6 +188,25 @@ namespace PostMatch.Infrastructure.Services
             user.UpdateTime = DateTime.Now;
 
             _iCompanyRepository.Update(user);
+        }
+
+        public void EditPassword(Companies companies, string password)
+        {
+            var users = _iCompanyRepository.GetById(companies.CompanyId);
+
+            if (users == null)
+                throw new AppException("该公司未注册！");
+
+            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            companies.PasswordHash = passwordHash;
+            companies.PasswordSalt = passwordSalt;
+
+            // update user properties
+            users.PasswordHash = companies.PasswordHash;
+            users.PasswordSalt = companies.PasswordSalt;
+            users.UpdateTime = DateTime.Now;
+
+            _iCompanyRepository.Update(users);
         }
 
         public void Delete(string id)
@@ -259,5 +294,6 @@ namespace PostMatch.Infrastructure.Services
 
             return dataSet;
         }
+
     }
 }

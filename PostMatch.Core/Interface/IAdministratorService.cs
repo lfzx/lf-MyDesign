@@ -12,6 +12,7 @@ namespace PostMatch.Core.Interface
         Administrator GetById(string id);
         Administrator Create(Administrator administrator, string password);
         void Update(Administrator administrator, string password = null);
+        void EditPassword(Administrator administrator, string password);
         void Delete(string id);
     }
 }
