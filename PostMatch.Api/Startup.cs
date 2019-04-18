@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.ML;
 using PostMatch.Api.Core;
 using PostMatch.Api.Helpers;
 using PostMatch.Api.Models;
@@ -17,6 +18,7 @@ using PostMatch.Infrastructure.DataAccess.Interface;
 using PostMatch.Infrastructure.DataBase;
 using PostMatch.Infrastructure.Services;
 using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -127,6 +129,25 @@ namespace PostMatch.Api
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
+
+            //添加PredictionEngine
+            services.AddScoped<MLContext>();
+            services.AddScoped<PredictionEngine<Resume, ResumePrediction>>((ctx) =>
+            {
+                MLContext mlContext = ctx.GetRequiredService<MLContext>();
+                string modelFilePathName = "Models/model.zip";
+
+                //Load model from file
+                ITransformer model;
+                using (var stream = File.OpenRead(modelFilePathName))
+                {
+                    model = mlContext.Model.Load(stream);
+                }
+
+                // Return prediction engine
+                return model.CreatePredictionEngine<Resume, ResumePrediction>(mlContext);
+            });
+
 
         }
 

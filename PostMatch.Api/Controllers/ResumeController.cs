@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Resume = PostMatch.Core.Entities.Resume;
 
 namespace PostMatch.Api.Controllers
 {
@@ -82,7 +83,7 @@ namespace PostMatch.Api.Controllers
             var resumeModel = _iMapper.Map<ResponseResumeModel>(resume);
             var user = _iUserService.GetById(resume.UserId);
             var userModel = _iMapper.Map<ResponseUserModel>(user);
-            resumeModel.responseUserModel= userModel;
+            resumeModel.responseUserModel = userModel;
             var count = 1;
             if (resumeModel != null)
             {
@@ -91,6 +92,18 @@ namespace PostMatch.Api.Controllers
             }
             throw new Exception("该简历不存在");
 
+          
+        }
+
+        [HttpGet("user/{id}")]
+        public IActionResult GetByIdForUser(string id)
+        {
+            DataSet item = _iResumeService.GetByIdForUser(id);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+            return Output(item, count);
         }
 
         [HttpGet("recommend/{id}")]

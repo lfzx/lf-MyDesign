@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PostMatch.Api.Models;
 using PostMatch.Core.Entities;
+using Resume = PostMatch.Core.Entities.Resume;
 
 namespace PostMatch.Api.Helpers
 {

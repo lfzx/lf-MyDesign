@@ -85,7 +85,13 @@ namespace PostMatch.Infrastructure.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.UpdateTime = DateTime.Now;
-            user.IsEnable = user.IsEnable;
+            user.School = user.School;
+            user.EntranceTime = user.EntranceTime;
+            user.GraduationTime = user.GraduationTime;
+            user.Academic = user.Academic;
+            user.Profession = user.Profession;
+            user.Gender = user.Gender;
+            user.IsEnable = 1;
             _iUserRepository.Add(user);
 
             return user;

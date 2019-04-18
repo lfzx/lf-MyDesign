@@ -153,6 +153,8 @@ namespace PostMatch.Api.Models
         public int IsEnable { get; set; }
         public DateTime ResumeUpdateTime { get; set; }
         public string Birth { get; set; }
+
+        public string RecommendPostId { get; set; }
     }
 
     public class ResponseResumeModel
@@ -169,6 +171,8 @@ namespace PostMatch.Api.Models
         public string ResumeExperience { get; set; }
         public string Skill { get; set; }
         public DateTime ResumeUpdateTime { get; set; }
+
+        public string RecommendPostId { get; set; }
 
         public string Birth { get; set; }
         public ResponseUserModel responseUserModel = new ResponseUserModel();
@@ -188,9 +192,10 @@ namespace PostMatch.Api.Models
         public string PostJobType { get; set; }
         public string AcademicRequirements { get; set; }
         public string PostExperience { get; set; }
-        public string PostEmail { get; set; }
         public int IsEnable { get; set; }
         public DateTime PostUpdateTime { get; set; }
+
+        public string RecommendResumeId { get; set; }
     }
 
     public class PostModels
@@ -207,9 +212,10 @@ namespace PostMatch.Api.Models
         public string PostJobType { get; set; }
         public string AcademicRequirements { get; set; }
         public string PostExperience { get; set; }
-        public string PostEmail { get; set; }
         public int IsEnable { get; set; }
         public DateTime PostUpdateTime { get; set; }
+
+        public string RecommendResumeId { get; set; }
 
         public CompanyUserModel company = new CompanyUserModel();
     }

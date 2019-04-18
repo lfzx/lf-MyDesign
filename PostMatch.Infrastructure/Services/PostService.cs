@@ -1,9 +1,11 @@
-﻿using PostMatch.Core.Entities;
+﻿using MySql.Data.MySqlClient;
+using PostMatch.Core.Entities;
 using PostMatch.Core.Helpers;
 using PostMatch.Core.Interface;
 using PostMatch.Infrastructure.DataAccess.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace PostMatch.Infrastructure.Services
@@ -47,7 +49,6 @@ namespace PostMatch.Infrastructure.Services
             post.AcademicRequirements = post.AcademicRequirements;
             post.NumberOfRecruits = post.NumberOfRecruits;
             post.PostTelephoneNumber = post.PostTelephoneNumber;
-            post.PostEmail = post.PostEmail;
             post.PostUpdateTime = DateTime.Now;
 
             _iPostRepository.Add(post);
@@ -79,6 +80,17 @@ namespace PostMatch.Infrastructure.Services
             return _iPostRepository.GetById(id);
         }
 
+        public DataSet GetByName(string name)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "SELECT postId,companyId FROM post WHERE postName=?name";
+            MySqlParameter param = new MySqlParameter("?name", MySqlDbType.String);
+            param.Value = name;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
+
         public void Patch(Post post, string companyId)
         {
             throw new NotImplementedException();
@@ -102,7 +114,6 @@ namespace PostMatch.Infrastructure.Services
             posts.AcademicRequirements = post.AcademicRequirements;
             posts.NumberOfRecruits = post.NumberOfRecruits;
             posts.PostTelephoneNumber = post.PostTelephoneNumber;
-            posts.PostEmail = post.PostEmail;
             posts.PostUpdateTime = DateTime.Now;
 
             _iPostRepository.Update(posts);

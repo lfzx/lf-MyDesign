@@ -18,6 +18,6 @@ namespace PostMatch.Core.Interface
         DataSet GetByResumeForRecommend(string id);
         DataSet GetByIdForDelivery(string id);
         DataSet GetByIdForInterview(string id);
-
+        DataSet GetByIdForUser(string id);
     }
 }

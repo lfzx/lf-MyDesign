@@ -16,7 +16,8 @@ namespace PostMatch.Core.Entities
         public string PostJobType { get; set; }
         public string AcademicRequirements { get; set; }
         public string PostExperience { get; set; }
-        public string PostEmail { get; set; }
         public DateTime PostUpdateTime { get; set; }
+
+        public string RecommendResumeId { get; set; }
     }
 }

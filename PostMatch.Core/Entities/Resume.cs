@@ -49,5 +49,8 @@ namespace PostMatch.Core.Entities
 
         [Column("resumeUpdateTime")]
         public DateTime ResumeUpdateTime { get; set; }
+
+        [Column("recommendPostId")]
+        public string RecommendPostId { get; set; }
     }
 }

@@ -79,7 +79,7 @@ namespace PostMatch.Api.Controllers
                     CompanyUrl = user.CompanyUrl,
                 },count);
             }
-            throw new Exception("无效用户");
+            throw new Exception("用户名或密码错误！");
         }
 
         [AllowAnonymous]

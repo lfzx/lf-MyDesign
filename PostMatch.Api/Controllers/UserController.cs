@@ -86,7 +86,7 @@ namespace PostMatch.Api.Controllers
                         academic = user.Academic
                     },count);
                 }
-                throw new Exception("无效用户");
+                throw new Exception("用户名或密码错误！");
         }
 
         [AllowAnonymous]

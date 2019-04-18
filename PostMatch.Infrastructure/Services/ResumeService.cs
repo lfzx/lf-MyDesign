@@ -176,5 +176,16 @@ namespace PostMatch.Infrastructure.Services
 
             return dataSet;
         }
+
+        public DataSet GetByIdForUser(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "SELECT * from resume r INNER JOIN user u ON r.userId = u.id WHERE resumeId =?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
     }
 }
