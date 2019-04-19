@@ -148,6 +148,24 @@ namespace PostMatch.Api
                 return model.CreatePredictionEngine<Resume, ResumePrediction>(mlContext);
             });
 
+            //添加PredictionEngine
+            services.AddScoped<MLContext>();
+            services.AddScoped<PredictionEngine<PostMatching, PostMatchingPrediction>>((ctx) =>
+            {
+                MLContext mlContext = ctx.GetRequiredService<MLContext>();
+                string modelFilePathName = "Models/postModel.zip";
+
+                //Load model from file
+                ITransformer model;
+                using (var stream = File.OpenRead(modelFilePathName))
+                {
+                    model = mlContext.Model.Load(stream);
+                }
+
+                // Return prediction engine
+                return model.CreatePredictionEngine<PostMatching, PostMatchingPrediction>(mlContext);
+            });
+
 
         }
 
@@ -171,17 +189,17 @@ namespace PostMatch.Api
                 if (!context.Request.Path.ToString().StartsWith("/api/passport"))
                 {
                     var _token = "";
-                    var _name = "";
-                    var _id = "";
+                    //var _name = "";
+                    //var _id = "";
                     if (context.Request.Headers.TryGetValue("token", out var tokens) && tokens.Count > 0)
                     {
                         _token = tokens[0];
-                        if(context.Request.Headers.TryGetValue("User", out var users) && tokens.Count > 0)
-                        {
-                            string[] sArray = Regex.Split(users, ",", RegexOptions.IgnoreCase);
-                            _name = sArray[0];
-                            _id = sArray[1];
-                        }
+                        //if(context.Request.Headers.TryGetValue("User", out var users) && tokens.Count > 0)
+                        //{
+                        //    string[] sArray = Regex.Split(users, ",", RegexOptions.IgnoreCase);
+                        //    _name = sArray[0];
+                        //    _id = sArray[1];
+                        //}
 
                     }
                     if (_token == "")
@@ -190,13 +208,13 @@ namespace PostMatch.Api
                         return;
                     }
 
-                    var user = new UserModel
-                    {
-                        Id = _id,
-                        Name = _name
-                    };
+                    //var user = new UserModel
+                    //{
+                    //    Id = _id,
+                    //    Name = _name
+                    //};
                     context.Items.Add("token", _token);
-                    context.Items.Add("user", user);
+                    //context.Items.Add("user", user);
                 }
                 await next();
             });

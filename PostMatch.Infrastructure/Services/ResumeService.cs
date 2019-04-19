@@ -170,5 +170,16 @@ namespace PostMatch.Infrastructure.Services
 
             return dataSet;
         }
+
+        public DataSet GetByName(string name)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "SELECT resumeId FROM resume WHERE resumePostName LIKE ?name";
+            MySqlParameter param = new MySqlParameter("?name", MySqlDbType.String);
+            param.Value = name;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
+        }
     }
 }

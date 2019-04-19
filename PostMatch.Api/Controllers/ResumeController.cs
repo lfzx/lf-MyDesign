@@ -95,6 +95,20 @@ namespace PostMatch.Api.Controllers
           
         }
 
+        [HttpGet("name/{id}")]
+        public IActionResult GetByName(string id)
+        {
+            var toId = "%" + id + "%";
+            DataSet item = _iResumeService.GetByName(toId);
+            var count = item.Tables[0].Rows.Count;
+            if (item == null)
+                return null;
+
+
+            return Output(item, count);
+
+        }
+
         [HttpGet("user/{id}")]
         public IActionResult GetByIdForUser(string id)
         {

@@ -19,5 +19,7 @@ namespace PostMatch.Core.Interface
         DataSet GetByIdForDelivery(string id);
         DataSet GetByIdForInterview(string id);
         DataSet GetByIdForUser(string id);
+
+        DataSet GetByName(string name);
     }
 }

@@ -83,7 +83,7 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByName(string name)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "SELECT postId,companyId FROM post WHERE postName=?name";
+            string cmdText = "SELECT postId,companyId FROM post WHERE postName LIKE ?name";
             MySqlParameter param = new MySqlParameter("?name", MySqlDbType.String);
             param.Value = name;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -98,7 +98,7 @@ namespace PostMatch.Infrastructure.Services
             if (posts == null)
                 throw new AppException("该职位不存在！");
 
-            var company = _iCompanyRepository.GetById(companyId;
+            var company = _iCompanyRepository.GetById(companyId);
             if (company == null)
             {
                 throw new AppException("该公司不存在！");

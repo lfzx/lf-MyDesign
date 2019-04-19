@@ -63,7 +63,9 @@ namespace PostMatch.Api.Controllers
             };
              _iResumeService.Patch(resumes,input.userId);
 
-            DataSet item = _iPostService.GetByName(post.PostName);
+            var postName = "%" + post.PostName + "%";
+            DataSet item = _iPostService.GetByName(postName);
+
             var count = item.Tables[0].Rows.Count;
             var i = 8;
             foreach (DataRow dr in item.Tables[0].Rows)
