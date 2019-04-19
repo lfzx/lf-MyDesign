@@ -65,6 +65,42 @@ namespace PostMatch.Infrastructure.Services
             return recommend;
         }
 
+        public Recommend CreateForMatch(Recommend recommend, string postId, string companyId)
+        {
+            // 验证
+            if (string.IsNullOrWhiteSpace(postId))
+                throw new AppException("职位id不能为空！");
+
+            if (string.IsNullOrWhiteSpace(companyId))
+                throw new AppException("公司id不能为空！");
+
+            var post = _iPostRepository.GetById(postId);
+
+            if (post == null)
+            {
+                throw new AppException("该职位不存在！");
+            }
+
+            var resume = _iResumeRepository.GetById(recommend.ResumeId);
+
+            if (resume == null)
+            {
+                throw new AppException("该简历不存在！");
+            }
+
+            recommend.RecommendId = Guid.NewGuid().ToString();
+
+            recommend.PostId = postId;
+            recommend.ResumeId = recommend.ResumeId;
+            recommend.CompanyId = companyId;
+            recommend.RecommendNumber = recommend.RecommendNumber;
+            recommend.RecommendUpdateTime = DateTime.Now;
+
+            _iRecommendRepository.Add(recommend);
+
+            return recommend;
+        }
+
         public void Delete(string id)
         {
             var recommend = _iRecommendRepository.GetById(id);

@@ -93,7 +93,20 @@ namespace PostMatch.Infrastructure.Services
 
         public void Patch(Post post, string companyId)
         {
-            throw new NotImplementedException();
+            var posts = _iPostRepository.GetById(post.PostId);
+
+            if (posts == null)
+                throw new AppException("该职位不存在！");
+
+            var company = _iCompanyRepository.GetById(companyId;
+            if (company == null)
+            {
+                throw new AppException("该公司不存在！");
+            }
+
+            posts.RecommendResumeId = post.RecommendResumeId;
+            posts.PostUpdateTime = DateTime.Now;
+            _iPostRepository.Update(posts);
         }
 
         public void Update(Post post)

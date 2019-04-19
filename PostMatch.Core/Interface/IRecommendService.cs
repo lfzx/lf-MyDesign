@@ -10,6 +10,7 @@ namespace PostMatch.Core.Interface
         IEnumerable<Recommend> GetAll();
         Recommend GetById(string id);
         Recommend Create(Recommend recommend, string postId, string resumeId);
+        Recommend CreateForMatch(Recommend recommend, string postId, string companyId);
         void Update(Recommend recommend);
         void Patch(Recommend recommend);
         void Delete(string id);

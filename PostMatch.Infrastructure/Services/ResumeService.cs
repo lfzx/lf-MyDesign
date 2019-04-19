@@ -106,26 +106,9 @@ namespace PostMatch.Infrastructure.Services
                 throw new AppException("该用户不存在！");
             }
 
-            // update user properties
-            resume.ResumeId = Guid.NewGuid().ToString();
-            if (resume.ResumeAvatar == null)
-            {
-                resumes.ResumeAvatar = "https://ng-alain.com/assets/img/logo-color.svg";
-            }
-            resumes.UserId = userId;
-            resumes.Birth = resume.Birth;
+            resumes.RecommendPostId = resume.RecommendPostId;
             resumes.ResumeUpdateTime = DateTime.Now;
-            resumes.ResumeTelephoneNumber = resume.ResumeTelephoneNumber;
-            resumes.FamilyAddress = resume.FamilyAddress;
-            resumes.ResumePostName = resume.ResumePostName;
-            resumes.ResumeSalary = resume.ResumeSalary;
-            resumes.ResumeWorkPlace = resume.ResumeWorkPlace;
-            resumes.ResumeJobType = resume.ResumeJobType;
-            resumes.ResumeExperience = resume.ResumeExperience;
-            resumes.Skill = resume.Skill;
-            resumes.IsEnable = 1;
-
-            _iResumeRepository.Update(resume);
+            _iResumeRepository.Update(resumes);
         }
 
         public void Update(Resume resume)
