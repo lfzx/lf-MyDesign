@@ -28,6 +28,12 @@ namespace PostMatch.Infrastructure.Services
             if (user == null)
                 return null;
 
+            //检查学校注册状态
+            if (user.Status == 0)
+            {
+                return user;
+            }
+
             // 检查密码是否正确
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
@@ -74,6 +80,8 @@ namespace PostMatch.Infrastructure.Services
             }
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.School = user.School;
+            user.Status = 0;
             user.UpdateTime = DateTime.Now;
         
             _iAdministratorRepository.Add(user);

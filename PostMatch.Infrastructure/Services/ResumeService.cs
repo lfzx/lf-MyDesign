@@ -41,6 +41,7 @@ namespace PostMatch.Infrastructure.Services
             }
             resume.UserId = userId;
             resume.Birth = resume.Birth;
+            resume.WorkYear= resume.WorkYear;
             resume.ResumeUpdateTime = DateTime.Now;
             resume.ResumeTelephoneNumber = resume.ResumeTelephoneNumber;
             resume.FamilyAddress = resume.FamilyAddress;
@@ -80,7 +81,10 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByResumeForRecommend(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "select * from recommend where resumeId=?id";
+            string cmdText = "SELECT recommendId,postName,companyName,resumePostName,recommendNumber,score,recommendUpdateTime" +
+                " FROM recommend left JOIN post on post.postId = recommend.postId LEFT JOIN resume on" +
+                " recommend.resumeId = resume.resumeId left JOIN companies on recommend.companyId =" +
+                " companies.companyId WHERE recommend.resumeId = resume.resumeId and recommend.resumeId=?id";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -106,7 +110,7 @@ namespace PostMatch.Infrastructure.Services
                 throw new AppException("该用户不存在！");
             }
 
-            resumes.RecommendPostId = resume.RecommendPostId;
+            //resumes.RecommendPostId = resume.RecommendPostId;
             resumes.ResumeUpdateTime = DateTime.Now;
             _iResumeRepository.Update(resumes);
         }
@@ -133,6 +137,7 @@ namespace PostMatch.Infrastructure.Services
             resumes.ResumeJobType = resume.ResumeJobType;
             resumes.ResumeExperience = resume.ResumeExperience;
             resumes.Skill = resume.Skill;
+            resumes.WorkYear = resume.WorkYear;
             resumes.IsEnable = 1;
 
             _iResumeRepository.Update(resumes);
@@ -141,7 +146,10 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForDelivery(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "select * from deliveries where resumeId=?id";
+            string cmdText = "SELECT deliveryId,postName,companyName,resumePostName,companyResponse,deliveryUpdateTime" +
+                     " FROM deliveries left JOIN post on post.postId = deliveries.postId LEFT JOIN resume on" +
+                     " deliveries.resumeId = resume.resumeId left JOIN companies on deliveries.companyId =" +
+                     " companies.companyId WHERE deliveries.resumeId = resume.resumeId and deliveries.resumeId=?id";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -152,7 +160,10 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForInterview(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "select * from interviews where resumeId=?id";
+            string cmdText = "SELECT interviewId,postName,companyName,name,userResponse,interviewUpdateTime" +
+                     " FROM interviews left JOIN post on post.postId = interviews.postId LEFT JOIN resume on" +
+                     " interviews.resumeId = resume.resumeId left JOIN companies on interviews.companyId =" +
+                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE interviews.resumeId = resume.resumeId and interviews.resumeId=?id";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);

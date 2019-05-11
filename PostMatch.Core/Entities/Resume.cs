@@ -41,6 +41,9 @@ namespace PostMatch.Core.Entities
         [Column("skill")]
         public string Skill { get; set; }
 
+       [Column("workYear")]
+       public string WorkYear { get; set; }
+
         [Column("birth")]
         public string Birth { get; set; }
 
@@ -50,7 +53,5 @@ namespace PostMatch.Core.Entities
         [Column("resumeUpdateTime")]
         public DateTime ResumeUpdateTime { get; set; }
 
-        [Column("recommendPostId")]
-        public string RecommendPostId { get; set; }
     }
 }

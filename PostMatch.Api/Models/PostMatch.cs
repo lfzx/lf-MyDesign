@@ -34,8 +34,6 @@ namespace PostMatch.Api.Models
         public DateTime postUpdateTime { get; set; }
         [LoadColumn(12)]
         public string postTelephoneNumber { get; set; }
-        [LoadColumn(13)]
-        public string recommendResumeId { get; set; }
     }
 
     public class PostMatchingPrediction

@@ -30,17 +30,20 @@ namespace PostMatch.Infrastructure.Services
             // 验证
             if (string.IsNullOrWhiteSpace(postId))
                 throw new AppException("职位id不能为空！");
-
+            
+            Console.WriteLine("职位id"+ postId);
+               
             if (string.IsNullOrWhiteSpace(resumeId))
                 throw new AppException("简历id不能为空！");
-
+            
+            Console.WriteLine("简历id"+ resumeId);
+            
             var post = _iPostRepository.GetById(postId);
 
             if (post == null)
             {
                 throw new AppException("该职位不存在！");
             }
-
             var resume = _iResumeRepository.GetById(resumeId);
 
             if (resume == null)
@@ -51,6 +54,8 @@ namespace PostMatch.Infrastructure.Services
             {
                 throw new AppException("该公司不存在！");
             }
+            
+            Console.WriteLine("公司id"+ recommend.CompanyId);
 
             recommend.RecommendId = Guid.NewGuid().ToString();
 
@@ -140,7 +145,7 @@ namespace PostMatch.Infrastructure.Services
             {
                 recommends.CompanyId = recommend.CompanyId;
             }
-            if (recommend.RecommendNumber != null)
+            if (recommend.RecommendNumber != 0)
             {
                 recommends.RecommendNumber = recommend.RecommendNumber;
             }

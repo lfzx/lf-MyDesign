@@ -28,6 +28,9 @@ namespace PostMatch.Core.Entities
         [Column("roleId")]
         public int RoleId { get; set; }
 
+        [Column("status")]
+        public int Status { get; set; }
+
         [Column("updateTime")]
         public DateTime UpdateTime { get; set; }
 

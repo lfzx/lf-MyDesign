@@ -18,6 +18,7 @@ namespace PostMatch.Infrastructure.Services
             _iUserRepository = iUserRepository;
         }
 
+        //登录时调用
         public User Authenticate(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
@@ -43,9 +44,16 @@ namespace PostMatch.Infrastructure.Services
             return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public DataSet GetAll(string school)
         {
-            return _iUserRepository.GetAll();
+            //return _iUserRepository.GetAll();
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "SELECT * FROM user WHERE school=?school";
+            MySqlParameter param = new MySqlParameter("?school", MySqlDbType.String);
+            param.Value = school;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
         }
 
         public User GetById(string id)
@@ -74,10 +82,6 @@ namespace PostMatch.Infrastructure.Services
             CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
             user.Id = Guid.NewGuid().ToString();
-            if(user.RoleId == 0)
-            {
-                user.RoleId = 2;
-            }
             if (user.Avatar == null)
             {
                 user.Avatar = "https://ng-alain.com/assets/img/logo-color.svg";
@@ -91,6 +95,7 @@ namespace PostMatch.Infrastructure.Services
             user.Academic = user.Academic;
             user.Profession = user.Profession;
             user.Gender = user.Gender;
+            user.RoleId = 2;
             user.IsEnable = 1;
             _iUserRepository.Add(user);
 
@@ -208,7 +213,7 @@ namespace PostMatch.Infrastructure.Services
         }
 
         // 私人助手方法
-
+        //创建hash和salt值
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException(nameof(password));
@@ -220,7 +225,7 @@ namespace PostMatch.Infrastructure.Services
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
-
+        //对比hash和salt值
         private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
             if (password == null) throw new ArgumentNullException(nameof(password));
@@ -238,6 +243,19 @@ namespace PostMatch.Infrastructure.Services
             }
 
             return true;
+        }
+
+        public DataSet GetByIdForMatch(string id)
+        {
+            CommandType cmdType = CommandType.Text;
+            string cmdText = "SELECT resumeId,userId,familyAddress,resumePostName,resumeSalary,resumeWorkPlace,resumeJobType,resumeExperience,skill,birth, workYear,profession,academic" +
+                     " FROM resume left JOIN user on user.id = resume.userId" +
+                     " WHERE resume.userId=?id";
+            MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
+            param.Value = id;
+            DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
+
+            return dataSet;
         }
 
     }

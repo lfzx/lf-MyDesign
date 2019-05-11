@@ -36,16 +36,16 @@ namespace PostMatch.Api.Controllers
                             },
                             new Menu()
                             {
+                                text = "招聘信息",
+                                link = "/company/posts",
+                                icon = "anticon anticon-profile",
+                            },
+                             new Menu()
+                            {
                                 text = "优才推荐",
                                 link = "/company/employeeRecommendations",
                                 icon = "anticon anticon-bulb"
                             },
-                            new Menu()
-                            {
-                                text = "招聘信息",
-                                link = "/company/posts",
-                                icon = "anticon anticon-profile",
-                            }
                         }
                     },
                     new Menu()

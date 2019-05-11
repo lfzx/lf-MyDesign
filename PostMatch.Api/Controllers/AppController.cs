@@ -36,15 +36,15 @@ namespace PostMatch.Api.Controllers
                             },
                             new Menu()
                             {
-                                text = "公司推荐",
-                                link = "/user/jobRecommendations",
-                                icon = "anticon anticon-bulb"
-                            },
-                            new Menu()
-                            {
                                 text = "个人简历",
                                 link = "/user/resumes",
                                 icon = "anticon anticon-profile",
+                            },
+                            new Menu()
+                            {
+                                text = "公司推荐",
+                                link = "/user/jobRecommendations",
+                                icon = "anticon anticon-bulb"
                             }
                         }
                     },

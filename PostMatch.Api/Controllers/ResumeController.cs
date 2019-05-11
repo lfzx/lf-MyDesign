@@ -98,6 +98,7 @@ namespace PostMatch.Api.Controllers
         [HttpGet("name/{id}")]
         public IActionResult GetByName(string id)
         {
+            //根据指定简历id返回的职位名寻找拥有该职位名的简历id
             var toId = "%" + id + "%";
             DataSet item = _iResumeService.GetByName(toId);
             var count = item.Tables[0].Rows.Count;
@@ -112,6 +113,7 @@ namespace PostMatch.Api.Controllers
         [HttpGet("user/{id}")]
         public IActionResult GetByIdForUser(string id)
         {
+            //根据指定简历id返回简历表和用户表中的信息
             DataSet item = _iResumeService.GetByIdForUser(id);
             var count = item.Tables[0].Rows.Count;
             if (item == null)
@@ -123,18 +125,18 @@ namespace PostMatch.Api.Controllers
         [HttpGet("recommend/{id}")]
         public IActionResult GetByCompanyId(string id)
         {
+            // 根据指定的简历id获取相应的推荐表
             DataSet item = _iResumeService.GetByResumeForRecommend(id);
             var count = item.Tables[0].Rows.Count;
             if (item == null)
                 return null;
-
-
             return Output(item, count);
         }
 
         [HttpGet("delivery/{id}")]
         public IActionResult GetByIdForDelivery(string id)
-        {
+        { 
+            // 根据指定的简历id获取相应的投递表
             DataSet item = _iResumeService.GetByIdForDelivery(id);
             var count = item.Tables[0].Rows.Count;
             if (item == null)
@@ -145,6 +147,7 @@ namespace PostMatch.Api.Controllers
         [HttpGet("interview/{id}")]
         public IActionResult GetByIdForInterview(string id)
         {
+            // 根据指定的简历id获取相应的面试邀请表
             DataSet item = _iResumeService.GetByIdForInterview(id);
             var count = item.Tables[0].Rows.Count;
             if (item == null)

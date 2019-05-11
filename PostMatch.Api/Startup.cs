@@ -130,43 +130,6 @@ namespace PostMatch.Api
                         .AllowAnyMethod());
             });
 
-            //添加PredictionEngine
-            services.AddScoped<MLContext>();
-            services.AddScoped<PredictionEngine<Resume, ResumePrediction>>((ctx) =>
-            {
-                MLContext mlContext = ctx.GetRequiredService<MLContext>();
-                string modelFilePathName = "Models/model.zip";
-
-                //Load model from file
-                ITransformer model;
-                using (var stream = File.OpenRead(modelFilePathName))
-                {
-                    model = mlContext.Model.Load(stream);
-                }
-
-                // Return prediction engine
-                return model.CreatePredictionEngine<Resume, ResumePrediction>(mlContext);
-            });
-
-            //添加PredictionEngine
-            services.AddScoped<MLContext>();
-            services.AddScoped<PredictionEngine<PostMatching, PostMatchingPrediction>>((ctx) =>
-            {
-                MLContext mlContext = ctx.GetRequiredService<MLContext>();
-                string modelFilePathName = "Models/postModel.zip";
-
-                //Load model from file
-                ITransformer model;
-                using (var stream = File.OpenRead(modelFilePathName))
-                {
-                    model = mlContext.Model.Load(stream);
-                }
-
-                // Return prediction engine
-                return model.CreatePredictionEngine<PostMatching, PostMatchingPrediction>(mlContext);
-            });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

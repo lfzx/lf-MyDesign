@@ -13,37 +13,34 @@ namespace PostMatch.Api.Models
         [LoadColumn(1)]
         public string userId { get; set; }
         [LoadColumn(2)]
-        public string resumeTelephoneNumber { get; set; }
-        [LoadColumn(3)]
         public string familyAddress { get; set; }
-        [LoadColumn(4)]
+        [LoadColumn(3)]
         public string resumePostName { get; set; }
-        [LoadColumn(5)]
+        [LoadColumn(4)]
         public string resumeSalary { get; set; }
-        [LoadColumn(6)]
+        [LoadColumn(5)]
         public string resumeWorkPlace { get; set; }
-        [LoadColumn(7)]
+        [LoadColumn(6)]
         public string resumeJobType { get; set; }
-        [LoadColumn(8)]
+        [LoadColumn(7)]
         public string resumeExperience { get; set; }
-        [LoadColumn(9)]
+        [LoadColumn(8)]
         public string skill { get; set; }
-        [LoadColumn(10)]
-        public DateTime resumeUpdateTime { get; set; }
-        [LoadColumn(11)]
-        public string resumeAvatar { get; set; }
-        [LoadColumn(12)]
-        public int isEnable { get; set; }
-        [LoadColumn(13)]
+        [LoadColumn(9)]
         public string birth { get; set; }
-        [LoadColumn(14)]
-        public string recommendPostId { get; set; }
+        [LoadColumn(10)]
+        public string workYear { get; set; }
+        [LoadColumn(11)]
+        public string profession { get; set; }
+        [LoadColumn(12)]
+        public string academic { get; set; }
 
     }
 
     public class ResumePrediction
     {
-        [ColumnName("PredictedLabel")]
         public string recommendPostId;
+
+        public string score;
     }
 }

@@ -48,38 +48,42 @@ namespace PostMatch.Api.Controllers
         {
             var user = _iCompanyService.Authenticate(userModel.Email, userModel.Password); 
 
-            if (user != null)
+            if(user.Status != 0)
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
+                if (user != null)
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
                     {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
                     new Claim(ClaimTypes.Name, user.CompanyId.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-                var count = 1;
-       
-                return Output(new CompanyLoginResponse
-                {
-                    token = tokenString,
-                    avatar = user.Avatar,
-                    email = user.Email,
-                    name = user.CompanyName,
-                    roleid = user.RoleId,
-                    id = user.CompanyId,
-                    OrganizationCode = user.OrganizationCode,
-                    PersonalNumber = user.PersonalNumber,
-                    CompanyDescription = user.CompanyDescription,
-                    CompanyUrl = user.CompanyUrl,
-                },count);
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+                    var count = 1;
+
+                    return Output(new CompanyLoginResponse
+                    {
+                        token = tokenString,
+                        avatar = user.Avatar,
+                        email = user.Email,
+                        name = user.CompanyName,
+                        roleid = user.RoleId,
+                        id = user.CompanyId,
+                        OrganizationCode = user.OrganizationCode,
+                        PersonalNumber = user.PersonalNumber,
+                        CompanyDescription = user.CompanyDescription,
+                        CompanyUrl = user.CompanyUrl,
+                    }, count);
+                }
+                throw new Exception("用户名或密码错误！");
             }
-            throw new Exception("用户名或密码错误！");
+            throw new Exception("还未通过审核！请稍后再试！");
         }
 
         [AllowAnonymous]
@@ -144,6 +148,8 @@ namespace PostMatch.Api.Controllers
                     PersonalNumber = userModel.PersonalNumber,
                     CompanyDescription = userModel.CompanyDescription,
                     CompanyUrl = userModel.CompanyUrl,
+                    roleid = userModel.roleid,
+                    Status = userModel.Status
                 }, count);
             }
             throw new Exception("该公司未注册");
@@ -155,6 +161,7 @@ namespace PostMatch.Api.Controllers
         {
             DataSet item = _iCompanyService.GetByName(id);
             var count = item.Tables[0].Rows.Count;
+
             if (item == null)
                 return null;
 

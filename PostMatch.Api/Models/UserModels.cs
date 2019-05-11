@@ -47,6 +47,8 @@ namespace PostMatch.Api.Models
 
         public string email { get; set; }
 
+        public string school{ get; set; }
+
         public string avatar { get; set; }
     }
 
@@ -104,6 +106,8 @@ namespace PostMatch.Api.Models
         public string id { get; set; }
         public string email { get; set; }
         public string avatar { get; set; }
+        public int Status { get; set; }
+
 
         public string OrganizationCode { get; set; }
         public string PersonalNumber { get; set; }
@@ -150,6 +154,7 @@ namespace PostMatch.Api.Models
         public string ResumeJobType { get; set; }
         public string ResumeExperience { get; set; }
         public string Skill { get; set; }
+        public string WorkYear { get; set; }
         public int IsEnable { get; set; }
         public DateTime ResumeUpdateTime { get; set; }
         public string Birth { get; set; }
@@ -170,6 +175,7 @@ namespace PostMatch.Api.Models
         public string ResumeJobType { get; set; }
         public string ResumeExperience { get; set; }
         public string Skill { get; set; }
+        public string WorkYear { get; set; }
         public DateTime ResumeUpdateTime { get; set; }
 
         public string RecommendPostId { get; set; }
@@ -238,7 +244,7 @@ namespace PostMatch.Api.Models
         public string PostId { get; set; }
         public string ResumeId { get; set; }
         public string RecommendNumber { get; set; }
-        public DateTime UpdateTime { get; set; }
+        public DateTime RecommendUpdateTime { get; set; }
         public string Score { get; set; }
         public string CompanyScore { get; set; }
         public string CompanyId { get; set; }

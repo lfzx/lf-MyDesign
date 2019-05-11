@@ -43,33 +43,39 @@ namespace PostMatch.Api.Controllers
         {
             var user = _iAdministratorService.Authenticate(userModel.Email, userModel.Password);
             var count = 1;
-            if (user != null)
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                    new Claim(ClaimTypes.Name, user.AdminId.ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
 
-                return Output(new LoginResponse
+            if (user.Status != 0)
+            {
+                if (user != null)
                 {
-                    token = tokenString,
-                    avatar = user.Avatar,
-                    email = user.Email,
-                    name = user.AdminName,
-                    roleid = user.RoleId,
-                    id = user.AdminId
-                },count);
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                    new Claim(ClaimTypes.Name, user.AdminId.ToString())
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    return Output(new LoginResponse
+                    {
+                        token = tokenString,
+                        avatar = user.Avatar,
+                        email = user.Email,
+                        name = user.AdminName,
+                        roleid = user.RoleId,
+                        school = user.School,
+                        id = user.AdminId
+                    }, count);
+                }
+                throw new Exception("用户名或密码错误！");
             }
-            throw new Exception("用户名或密码错误！");
+            throw new Exception("还未通过审核！请稍后再试！");
         }
 
         [AllowAnonymous]

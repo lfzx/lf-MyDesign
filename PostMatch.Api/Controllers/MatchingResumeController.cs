@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ML;
-using PostMatch.Api.Models;
+using PostMatch.Api.Helpers;
+using PostMatch.Core.Entities;
 using PostMatch.Core.Interface;
+using Resume = PostMatch.Api.Models.Resume;
 
 namespace PostMatch.Api.Controllers
 {
@@ -13,96 +17,94 @@ namespace PostMatch.Api.Controllers
     [AllowAnonymous]
     public class MatchingResumeController : ControllerApiBase
     {
-        private readonly PredictionEngine<PostMatching, PostMatchingPrediction> _predictionEngine;
+	    ProductRepository productRepository = new ProductRepository();//直接数据库操作
+        Calculate calculate = new Calculate();//直接匹配操作
+		
+		List<Resume> list = new List<Resume>();
+        List<Recommend> finalResult = new List<Recommend>();
+	
         private readonly IPostService _iPostService;
-        private readonly IResumeService _iResumeService;
         private readonly IRecommendService _iRecommendService;
 
-        public MatchingResumeController(PredictionEngine<PostMatching, PostMatchingPrediction> predictionEngine,
+        public MatchingResumeController(
             IPostService iPostService,
-             IResumeService iResumeService,
             IRecommendService iRecommendService)
         {
-            _predictionEngine = predictionEngine;
             _iPostService = iPostService;
-            _iResumeService = iResumeService;
             _iRecommendService = iRecommendService;
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult<string> Post([FromBody]PostMatching input)
+        public ActionResult<string> Resume([FromBody]Post input)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+			
+			var post = _iPostService.GetById(input.PostId);
+			
+			DataSet allResumes = productRepository.GetResumes();
+			list = DataSetToList<Resume>(allResumes, 0);
+			Console.Write("1 -到这里了");
+            finalResult = calculate.GetMatchingResultsByPost(list,post);
 
-            PostMatchingPrediction prediction = _predictionEngine.Predict(input);
-
-            var resumeId = prediction.recommendResumeId;
-
-            var resume = _iResumeService.GetById(resumeId);
-
-            PostMatch.Core.Entities.Post post = new PostMatch.Core.Entities.Post
-            {
-               PostId = input.postId,
-               RecommendResumeId = resumeId,
-               CompanyId = input.companyId
-            };
-
-            _iPostService.Patch(post, input.companyId);
-
-            PostMatch.Core.Entities.Recommend recommend = new PostMatch.Core.Entities.Recommend
-            {
-                ResumeId = resumeId,
-                RecommendNumber = "10",
-            };
-            _iRecommendService.CreateForMatch(recommend, input.postId, input.companyId);
-
-            string[] postName = resume.ResumePostName.Split('、');
-            var i = 9;
-
-            foreach (string name in postName)
-            {
-                var finalName = "%" + name + "%";
-                DataSet item = _iResumeService.GetByName(finalName);
-                var count = item.Tables[0].Rows.Count;
-
-                var sum = count > 4 ? count / (count/2) : count;
-
-                foreach (DataRow dr in item.Tables[0].Rows)
+            foreach (var recommend in finalResult)
                 {
-                    if (dr[0].ToString() == resumeId)
+                    Console.WriteLine("简历id："+recommend.ResumeId);
+                    Recommend recommends = new Recommend
                     {
-                        continue;
-                    }
-                    PostMatch.Core.Entities.Recommend recommends = new PostMatch.Core.Entities.Recommend
-                    {
-                        ResumeId = dr[0].ToString(),
-                        RecommendNumber = i.ToString(),
+                        ResumeId = recommend.ResumeId,
+                        PostId = recommend.PostId,
+                        CompanyId = recommend.CompanyId,
+                        RecommendNumber = recommend.RecommendNumber
                     };
-                    Console.WriteLine("--------" + dr[0].ToString() + "---------");
-                    var result = _iRecommendService.CreateForMatch(recommends, input.postId, input.companyId);
-                    i--;
-                    sum--;
-                    if(sum == 0)
-                    {
-                        break;
-                    }
-                    if (i == 0)
-                    {
-                        break;
-                    }
-                }
-                if(i == 0)
-                {
-                    break;
-                }
+                    _iRecommendService.Create(recommends, recommends.PostId, recommends.ResumeId);
+
+                }  
+				return Output("ok", 1);
             }
+	
+	public List<Resume> DataSetToList<Resume>(DataSet dataSet, int tableIndex)
+        {
+            //确认参数有效
+            if (dataSet == null || dataSet.Tables.Count <= 0 || tableIndex < 0)
+                return null;
 
-            return Output(resumeId, 1);
+            DataTable dt = dataSet.Tables[tableIndex];
 
-        }  
-    }
+            List<Resume> list = new List<Resume>();
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                //创建泛型对象
+                Resume _t = Activator.CreateInstance<Resume>();
+                //获取对象所有属性
+                PropertyInfo[] propertyInfo = _t.GetType().GetProperties();
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    foreach (PropertyInfo info in propertyInfo)
+                    {
+                        //属性名称和列名相同时赋值
+                        if (dt.Columns[j].ColumnName.ToUpper().Equals(info.Name.ToUpper()))
+                        {
+                            if (dt.Rows[i][j] != DBNull.Value)
+                            {
+                                info.SetValue(_t, dt.Rows[i][j], null);
+                            }
+                            else
+                            {
+                                info.SetValue(_t, null, null);
+                            }
+                            break;
+                        }
+                    }
+                }
+                list.Add(_t);
+            }
+            return list;
+        }
+
+}
 }

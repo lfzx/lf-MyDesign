@@ -150,15 +150,15 @@ namespace PostMatch.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string id)
         {
-            var users = _iUserService.GetAll();
-            var userModels = _iMapper.Map<IList<UserModel>>(users);
-            var count = userModels.Count();
-            if(userModels != null)
+            var users = _iUserService.GetAll(id);
+            
+            var count = users.Tables[0].Rows.Count; 
+            if(users != null)
             {
 
-                return Output(userModels,count);
+                return Output(users,count);
             }
             throw new Exception("没有数据");
         
@@ -172,11 +172,9 @@ namespace PostMatch.Api.Controllers
             var count = 1;
             if (userModel != null)
             {
-
                 return Output(userModel,count);
             }
             throw new Exception("该用户不存在");
-
         }
 
         [HttpPut("{id}")]

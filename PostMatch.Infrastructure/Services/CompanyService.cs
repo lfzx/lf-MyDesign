@@ -32,7 +32,7 @@ namespace PostMatch.Infrastructure.Services
             //检查公司注册状态
             if(user.Status == 0)
             {
-                return null;
+                return user;
             }
 
             // 检查密码是否正确
@@ -265,7 +265,10 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForDelivery(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "select * from deliveries where companyId=?id";
+            string cmdText = "SELECT deliveryId,postName,companyName,name,resumePostName,companyResponse,deliveryUpdateTime" +
+                     " FROM deliveries left JOIN post on post.postId = deliveries.postId LEFT JOIN resume on" +
+                     " deliveries.resumeId = resume.resumeId left JOIN companies on deliveries.companyId =" +
+                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE deliveries.companyId = companies.companyId and deliveries.companyId=?id";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -276,7 +279,10 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForRecommend(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "select * from recommend where companyId=?id";
+            string cmdText = "SELECT recommendId,postName,companyName,name,resumePostName,recommendNumber,score,recommendUpdateTime" +
+                " FROM recommend left JOIN post on post.postId = recommend.postId LEFT JOIN resume on" +
+                " recommend.resumeId = resume.resumeId left JOIN companies on recommend.companyId =" +
+                " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE recommend.companyId = companies.companyId and recommend.companyId=?id";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -287,7 +293,10 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForInterview(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "select * from interviews where companyId=?id";
+            string cmdText = "SELECT interviewId,postName,companyName,name,resumePostName,userResponse,interviewUpdateTime" +
+                     " FROM interviews left JOIN post on post.postId = interviews.postId LEFT JOIN resume on" +
+                     " interviews.resumeId = resume.resumeId left JOIN companies on interviews.companyId =" +
+                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE interviews.companyId = companies.companyId and interviews.companyId=?id";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);

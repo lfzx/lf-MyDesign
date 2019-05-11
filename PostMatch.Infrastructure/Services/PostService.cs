@@ -104,7 +104,7 @@ namespace PostMatch.Infrastructure.Services
                 throw new AppException("该公司不存在！");
             }
 
-            posts.RecommendResumeId = post.RecommendResumeId;
+            //posts.RecommendResumeId = post.RecommendResumeId;
             posts.PostUpdateTime = DateTime.Now;
             _iPostRepository.Update(posts);
         }
