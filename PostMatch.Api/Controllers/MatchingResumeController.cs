@@ -47,12 +47,10 @@ namespace PostMatch.Api.Controllers
 			
 			DataSet allResumes = productRepository.GetResumes();
 			list = DataSetToList<Resume>(allResumes, 0);
-			Console.Write("1 -到这里了");
             finalResult = calculate.GetMatchingResultsByPost(list,post);
-
+            
             foreach (var recommend in finalResult)
                 {
-                    Console.WriteLine("简历id："+recommend.ResumeId);
                     Recommend recommends = new Recommend
                     {
                         ResumeId = recommend.ResumeId,
@@ -61,7 +59,6 @@ namespace PostMatch.Api.Controllers
                         RecommendNumber = recommend.RecommendNumber
                     };
                     _iRecommendService.Create(recommends, recommends.PostId, recommends.ResumeId);
-
                 }  
 				return Output("ok", 1);
             }

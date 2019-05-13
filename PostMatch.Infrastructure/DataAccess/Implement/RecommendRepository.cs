@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace PostMatch.Infrastructure.DataAccess.Implement
 {
@@ -16,6 +16,12 @@ namespace PostMatch.Infrastructure.DataAccess.Implement
         public RecommendRepository(MyContext context)
         {
             _context = context;
+        }
+        
+        public IEnumerable<Recommend> GetIdByPostIdAndResumeId(string postId, string resumeId)
+        {
+            var emp = _context.Set<Recommend>().Where(x => x.ResumeId == resumeId && x.PostId == postId).AsNoTracking();
+            return emp;
         }
 
         public int Add(Recommend recommend)

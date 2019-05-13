@@ -8,7 +8,6 @@ namespace PostMatch.Infrastructure.DataAccess.Interface
     public interface IUserRepository
     {
         User GetUserByEmail(string email);
-        User GetUserByName(string name);
         IEnumerable<User> GetAll();
         User GetById(string id);
         bool Any(Expression<Func<User, bool>> predicate);

@@ -4,7 +4,10 @@ using PostMatch.Core.Interface;
 using PostMatch.Infrastructure.DataAccess.Interface;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Text;
+using MySql.Data.MySqlClient;
 
 namespace PostMatch.Infrastructure.Services
 {
@@ -13,7 +16,6 @@ namespace PostMatch.Infrastructure.Services
         private readonly IRecommendRepository _iRecommendRepository;
         private readonly IPostRepository _iPostRepository;
         private readonly IResumeRepository _iResumeRepository;
-
         public RecommendService(
             IRecommendRepository iRecommendRepository,
             IPostRepository iPostRepository,
@@ -25,19 +27,15 @@ namespace PostMatch.Infrastructure.Services
             _iResumeRepository = iResumeRepository;
         }
 
-        public Recommend Create(Recommend recommend, string postId, string resumeId)
+        public Recommend Create(Recommend recommends, string postId, string resumeId)
         {
             // 验证
             if (string.IsNullOrWhiteSpace(postId))
                 throw new AppException("职位id不能为空！");
             
-            Console.WriteLine("职位id"+ postId);
-               
             if (string.IsNullOrWhiteSpace(resumeId))
                 throw new AppException("简历id不能为空！");
-            
-            Console.WriteLine("简历id"+ resumeId);
-            
+
             var post = _iPostRepository.GetById(postId);
 
             if (post == null)
@@ -50,62 +48,33 @@ namespace PostMatch.Infrastructure.Services
             {
                 throw new AppException("该简历不存在！");
             }
-            if (recommend.CompanyId == null)
+
+            IEnumerable<Recommend> _recommendForResume = _iRecommendRepository.GetIdByPostIdAndResumeId(postId, resumeId);
+ 
+            if (_recommendForResume.Count()>0)
             {
-                throw new AppException("该公司不存在！");
+                foreach (var ls in _recommendForResume)
+                {
+                    recommends.RecommendId = ls.RecommendId;
+                    recommends.RecommendUpdateTime = DateTime.Now;
+                }
+                _iRecommendRepository.Update(recommends);
+                return recommends;
             }
             
-            Console.WriteLine("公司id"+ recommend.CompanyId);
+            recommends.RecommendId = Guid.NewGuid().ToString();
 
-            recommend.RecommendId = Guid.NewGuid().ToString();
+            recommends.PostId = postId;
+            recommends.ResumeId = resumeId;
+            recommends.CompanyId = recommends.CompanyId;
+            recommends.RecommendNumber = recommends.RecommendNumber;
+            recommends.RecommendUpdateTime = DateTime.Now;
 
-            recommend.PostId = postId;
-            recommend.ResumeId = resumeId;
-            recommend.CompanyId = recommend.CompanyId;
-            recommend.RecommendNumber = recommend.RecommendNumber;
-            recommend.RecommendUpdateTime = DateTime.Now;
+            _iRecommendRepository.Add(recommends);
 
-            _iRecommendRepository.Add(recommend);
-
-            return recommend;
+            return recommends;
         }
-
-        public Recommend CreateForMatch(Recommend recommend, string postId, string companyId)
-        {
-            // 验证
-            if (string.IsNullOrWhiteSpace(postId))
-                throw new AppException("职位id不能为空！");
-
-            if (string.IsNullOrWhiteSpace(companyId))
-                throw new AppException("公司id不能为空！");
-
-            var post = _iPostRepository.GetById(postId);
-
-            if (post == null)
-            {
-                throw new AppException("该职位不存在！");
-            }
-
-            var resume = _iResumeRepository.GetById(recommend.ResumeId);
-
-            if (resume == null)
-            {
-                throw new AppException("该简历不存在！");
-            }
-
-            recommend.RecommendId = Guid.NewGuid().ToString();
-
-            recommend.PostId = postId;
-            recommend.ResumeId = recommend.ResumeId;
-            recommend.CompanyId = companyId;
-            recommend.RecommendNumber = recommend.RecommendNumber;
-            recommend.RecommendUpdateTime = DateTime.Now;
-
-            _iRecommendRepository.Add(recommend);
-
-            return recommend;
-        }
-
+        
         public void Delete(string id)
         {
             var recommend = _iRecommendRepository.GetById(id);
