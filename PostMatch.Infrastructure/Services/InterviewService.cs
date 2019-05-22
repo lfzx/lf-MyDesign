@@ -109,7 +109,7 @@ namespace PostMatch.Infrastructure.Services
             interviews.UserResponse = interview.UserResponse;
             interviews.InterviewUpdateTime = DateTime.Now;
 
-            _iInterviewRepository.Patch(interviews);
+            _iInterviewRepository.Update(interviews);
         }
 
         public void Update(Interview interview)

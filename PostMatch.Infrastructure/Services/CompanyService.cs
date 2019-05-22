@@ -63,16 +63,16 @@ namespace PostMatch.Infrastructure.Services
                 throw new AppException("组织机构代码不能为空！");
 
             if (string.IsNullOrEmpty(companies.CompanyName.Trim()))
-                throw new AppException("用户名不能为空！");
+                throw new AppException("公司名不能为空！");
 
             if (string.IsNullOrEmpty(companies.Email.Trim()))
                 throw new AppException("邮箱不能为空！");
 
-            //if (_iUserRepository.Any(x => x.Email == user.Email))
-            //    throw new AppException("Email \"" + user.Email + "\" is already taken");
-
-            //if (_iUserRepository.Any(x => x.UserName == user.UserName))
-            //    throw new AppException("Username \"" + user.UserName + "\" is already taken");
+//            if (_iCompanyRepository.Any(x => x.Email == companies.Email))
+//                throw new AppException("Email \"" + companies.Email + "\" is already taken");
+//
+//            if (_iCompanyRepository.Any(x => x.CompanyName == companies.CompanyName))
+//                throw new AppException("CompanyName \"" + companies.CompanyName + "\" is already taken");
 
             CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
@@ -268,7 +268,8 @@ namespace PostMatch.Infrastructure.Services
             string cmdText = "SELECT deliveryId,postName,companyName,name,resumePostName,companyResponse,deliveryUpdateTime" +
                      " FROM deliveries left JOIN post on post.postId = deliveries.postId LEFT JOIN resume on" +
                      " deliveries.resumeId = resume.resumeId left JOIN companies on deliveries.companyId =" +
-                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE deliveries.companyId = companies.companyId and deliveries.companyId=?id";
+                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE deliveries.companyId = companies.companyId and deliveries.companyId=?id " +
+                     "ORDER BY deliveryUpdateTime DESC";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -279,10 +280,11 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForRecommend(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "SELECT recommendId,postName,companyName,name,resumePostName,recommendNumber,score,recommendUpdateTime" +
+            string cmdText = "SELECT recommendId,postName,name,resumePostName,recommendNumber,recommendUpdateTime,academic,postSalary,postWorkPlace,workYear" +
                 " FROM recommend left JOIN post on post.postId = recommend.postId LEFT JOIN resume on" +
                 " recommend.resumeId = resume.resumeId left JOIN companies on recommend.companyId =" +
-                " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE recommend.companyId = companies.companyId and recommend.companyId=?id";
+                " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE recommend.companyId = companies.companyId and recommend.companyId=?id" +
+                " ORDER BY recommendNumber DESC";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -296,7 +298,8 @@ namespace PostMatch.Infrastructure.Services
             string cmdText = "SELECT interviewId,postName,companyName,name,resumePostName,userResponse,interviewUpdateTime" +
                      " FROM interviews left JOIN post on post.postId = interviews.postId LEFT JOIN resume on" +
                      " interviews.resumeId = resume.resumeId left JOIN companies on interviews.companyId =" +
-                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE interviews.companyId = companies.companyId and interviews.companyId=?id";
+                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE interviews.companyId = companies.companyId and interviews.companyId=?id " +
+                     "ORDER BY interviewUpdateTime DESC";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);

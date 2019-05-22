@@ -43,11 +43,11 @@ namespace PostMatch.Api.Controllers
                 return BadRequest();
             }
 			
-			var post = _iPostService.GetById(input.PostId);
-			
+//			var post = _iPostService.GetById(input.PostId);
+
 			DataSet allResumes = productRepository.GetResumes();
 			list = DataSetToList<Resume>(allResumes, 0);
-            finalResult = calculate.GetMatchingResultsByPost(list,post);
+            finalResult = calculate.GetMatchingResultsByPost(list,input);
             
             foreach (var recommend in finalResult)
                 {

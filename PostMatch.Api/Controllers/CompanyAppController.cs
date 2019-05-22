@@ -42,7 +42,7 @@ namespace PostMatch.Api.Controllers
                             },
                              new Menu()
                             {
-                                text = "优才推荐",
+                                text = "简历推荐",
                                 link = "/company/employeeRecommendations",
                                 icon = "anticon anticon-bulb"
                             },

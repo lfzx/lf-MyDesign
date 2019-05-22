@@ -81,10 +81,11 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByResumeForRecommend(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "SELECT recommendId,postName,companyName,resumePostName,recommendNumber,score,recommendUpdateTime" +
+            string cmdText = "SELECT recommendId,postName,companyName,resumePostName,recommendNumber,score,postExperience,recommendUpdateTime,avatar,city,postSalary,academicRequirements" +
                 " FROM recommend left JOIN post on post.postId = recommend.postId LEFT JOIN resume on" +
                 " recommend.resumeId = resume.resumeId left JOIN companies on recommend.companyId =" +
-                " companies.companyId WHERE recommend.resumeId = resume.resumeId and recommend.resumeId=?id";
+                " companies.companyId WHERE recommend.resumeId = resume.resumeId and recommend.resumeId=?id" +
+                " ORDER BY recommendNumber DESC";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -149,7 +150,8 @@ namespace PostMatch.Infrastructure.Services
             string cmdText = "SELECT deliveryId,postName,companyName,resumePostName,companyResponse,deliveryUpdateTime" +
                      " FROM deliveries left JOIN post on post.postId = deliveries.postId LEFT JOIN resume on" +
                      " deliveries.resumeId = resume.resumeId left JOIN companies on deliveries.companyId =" +
-                     " companies.companyId WHERE deliveries.resumeId = resume.resumeId and deliveries.resumeId=?id";
+                     " companies.companyId WHERE deliveries.resumeId = resume.resumeId and deliveries.resumeId=?id " +
+                     "ORDER BY deliveryUpdateTime DESC";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);
@@ -160,10 +162,11 @@ namespace PostMatch.Infrastructure.Services
         public DataSet GetByIdForInterview(string id)
         {
             CommandType cmdType = CommandType.Text;
-            string cmdText = "SELECT interviewId,postName,companyName,name,userResponse,interviewUpdateTime" +
+            string cmdText = "SELECT interviewId,postName,companyName,name,userResponse,interviewUpdateTime,resumePostName" +
                      " FROM interviews left JOIN post on post.postId = interviews.postId LEFT JOIN resume on" +
                      " interviews.resumeId = resume.resumeId left JOIN companies on interviews.companyId =" +
-                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE interviews.resumeId = resume.resumeId and interviews.resumeId=?id";
+                     " companies.companyId LEFT JOIN user on user.id = resume.userId WHERE interviews.resumeId = resume.resumeId and interviews.resumeId=?id" +
+                     " ORDER BY interviewUpdateTime DESC";
             MySqlParameter param = new MySqlParameter("?id", MySqlDbType.String);
             param.Value = id;
             DataSet dataSet = MysqlHelper.GetDataSet(cmdType, cmdText, param);

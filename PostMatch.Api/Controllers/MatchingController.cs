@@ -30,15 +30,23 @@ namespace PostMatch.Api.Controllers
         Calculate calculate = new Calculate();//直接匹配操作
 
         private readonly IUserService _iUserService;
+        private readonly IResumeService _resumeService;
+        private readonly IPostService _iPostService;
         private readonly IRecommendService _iRecommendService;
         List<Post> list = new List<Post>();
         List<Recommend> finalResult = new List<Recommend>();
 
+        //List<Resume> lists = new List<Resume>();
+
         public MatchingController(
              IUserService iUserService,
+             IResumeService resumeService,
+             IPostService iPostService,
             IRecommendService iRecommendService)
         {
             _iUserService = iUserService;
+            _resumeService = resumeService;
+            _iPostService = iPostService;
             _iRecommendService = iRecommendService;
         }
 
@@ -51,48 +59,65 @@ namespace PostMatch.Api.Controllers
                 return BadRequest();
             }
 
-            DataSet finalInput = _iUserService.GetByIdForMatch(input.userId);
-
-            foreach (DataRow ds in finalInput.Tables[0].Rows)
-            {
-                Resume finalResume = new Resume
-                {
-                    resumeId = ds[0].ToString(),
-                    userId = ds[1].ToString(),
-                    familyAddress = ds[2].ToString(),
-                    resumePostName = ds[3].ToString(),
-                    resumeSalary = ds[4].ToString(),
-                    resumeWorkPlace = ds[5].ToString(),
-                    resumeJobType = ds[6].ToString(),
-                    resumeExperience = ds[7].ToString(),
-                    skill = ds[8].ToString(),
-                    birth = ds[9].ToString(),
-                    workYear = ds[10].ToString(),
-                    profession = ds[11].ToString(),
-                    academic = ds[12].ToString()
-                };
-
                 DataSet allPosts = productRepository.GetPosts();
 
                 list = DataSetToList<Post>(allPosts, 0);
 
-                finalResult = calculate.GetMatchingResultsByResume(finalResume, list);
+            //DataSet allResumes = productRepository.GetResumes();
+            //lists = DataSetToList<Resume>(allResumes, 0);
 
-                foreach (var recommend in finalResult)
+            //     foreach (var resume in lists)
+            //     {
+            //         finalResult = calculate.GetMatchingResultsByResume(resume, list);
+
+            //         Console.WriteLine("简历信息：期望职位名：{0},期望薪资：{1},工作经验年限：{2}，技能：{3}", resume.resumePostName,
+            //resume.resumeSalary,
+            //resume.workYear, resume.skill);
+            //         foreach (var recommend in finalResult)
+            //         {
+            //             var post = _iPostService.GetById(recommend.PostId);
+
+            //             Console.WriteLine("职位信息：职位名：{0},薪资：{1},工作经验年限要求：{2}，职位描述：{3}", post.PostName, post.PostSalary,
+            //                 post.PostExperience, post.PostDescription);
+            //             Console.WriteLine("----------------");
+
+            //         }
+            //     }
+
+            //foreach (var post in list)
+            //{
+            //    finalResult = calculate.GetMatchingResultsByPost(lists, post);
+
+            //    Console.WriteLine("职位信息：职位名：{0},薪资：{1},工作经验年限要求：{2}，职位描述：{3}", post.PostName, post.PostSalary,
+            //         post.PostExperience, post.PostDescription);
+            //    foreach (var recommend in finalResult)
+            //    {
+            //        Console.WriteLine("----------------");
+            //   var resume = _resumeService.GetById(recommend.ResumeId);
+            //        Console.WriteLine("简历信息：期望职位名：{0},期望薪资：{1},工作经验年限：{2}，技能：{3}", resume.ResumePostName,
+            //            resume.ResumeSalary,
+            //            resume.WorkYear, resume.Skill);
+            //    }
+            //}
+
+
+
+            finalResult = calculate.GetMatchingResultsByResume(input, list);
+
+            foreach (var recommend in finalResult)
+            {
+                Recommend recommends = new Recommend
                 {
-                    Recommend recommends = new Recommend
-                    {
-                        ResumeId = recommend.ResumeId,
-                        PostId = recommend.PostId,
-                        CompanyId = recommend.CompanyId,
-                        RecommendNumber = recommend.RecommendNumber
-                    };
-                    _iRecommendService.Create(recommends, recommends.PostId, recommends.ResumeId);
+                    ResumeId = recommend.ResumeId,
+                    PostId = recommend.PostId,
+                    CompanyId = recommend.CompanyId,
+                    RecommendNumber = recommend.RecommendNumber
+                };
+                _iRecommendService.Create(recommends, recommends.PostId, recommends.ResumeId);
 
-                }  
             }
 
-            return Output("ok", 1);
+            return Output("ok", 5);
         }
 
         public List<Post> DataSetToList<Post>(DataSet dataSet, int tableIndex)

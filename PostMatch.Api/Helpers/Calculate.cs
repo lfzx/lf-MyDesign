@@ -245,7 +245,6 @@ namespace PostMatch.Api.Helpers
             var resumeMap = GetResumeTf_Idf(resume);
             foreach (var post in posts)
             {
-                Console.Write("--获取单个简历--");
                 var result =  getMatchingResultByResume(post, resumeMap);
                 matchingResults.Add(result);
             }
@@ -287,7 +286,6 @@ namespace PostMatch.Api.Helpers
             //获得工作年限匹配
             var exTime = Similarity(post.PostExperience, resume["workYear"]);
             exTime = exTime > 0 ? exTime : 0;
-            Console.WriteLine("年限：{0}",exTime);
 //            Console.Write("3");
             //获得岗位职责和个人信息匹配度
             var info = Similarity(post.PostDescription, resume["resumeExperience"]);
@@ -637,6 +635,25 @@ namespace PostMatch.Api.Helpers
             //夹角余弦值计算公式，两向量内积除以两向量的模长乘积
             long c = DateTime.Now.Millisecond;
             return sum / (i_length * j_length);
+        }
+        
+        //计算工作性质是否是一个工作性质
+        private static double IsSame(string a, string b)
+        {
+            const double result = 1.0;
+            if (a.Equals(b))
+            {
+                return result;
+            }
+
+            if (a.Contains(b) || b.Contains(a))
+            {
+                return result - 0.5;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
